@@ -53,18 +53,18 @@ scraping:
                     # eval: (e) => e.innerText
                     regex: “(.*?)”
                     # format: '{}'
-                    # children: []
+                    # children: null
                 Answer:
                     query: .author
                     # all: false
                     # eval: (e) => e.innerText
                     # regex: null
                     # format: '{}'
-                    # children: []
+                    # children: null
                 More:
                     query: .author + a
                     # all: false
                     eval: (e) => e.getAttribute('href')
                     # regex: null
                     format: https://quotes.toscrape.com{}/
-                    # children: []
+                    # children: null
