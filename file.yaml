@@ -1,0 +1,70 @@
+meta:
+    package: default
+    deck: default
+    model: default
+    scraping: defalut
+
+package:
+    name: PackageName
+    output_path: ./out/
+    media: ./media/
+
+deck:
+    name: My Deck
+    id: 123789456
+
+model:
+    name: Model Name
+    id: 8527419630
+    css: |
+        #answer {
+            border-color: blue;
+        }
+    templates:
+        Card1:
+            qfmt: |
+                {{Question}}
+            afmt: |
+                {{FrontSide}}
+                \n\n
+                <hr id=answer>
+                \n\n
+                {{Answer}}
+                \n 
+                <a href='{{More}}'>
+                    about author
+                <a>
+
+scraping:
+    urls:
+        - https://quotes.toscrape.com/page/1/
+        - https://quotes.toscrape.com/page/2/
+    queries:
+        Quote:
+            query: .quote
+            all: true
+            # eval: (e) => e.innerText
+            # regex: null
+            # format: '{}'
+            children:
+                Question:
+                    query: .text
+                    # all: false
+                    # eval: (e) => e.innerText
+                    regex: “(.*?)”
+                    # format: '{}'
+                    # children: []
+                Answer:
+                    query: .author
+                    # all: false
+                    # eval: (e) => e.innerText
+                    # regex: null
+                    # format: '{}'
+                    # children: []
+                More:
+                    query: .author + a
+                    # all: false
+                    eval: (e) => e.getAttribute('href')
+                    # regex: null
+                    format: https://quotes.toscrape.com{}/
+                    # children: []
