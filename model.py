@@ -27,6 +27,7 @@ def get_model(model_config) -> Model:
             a = in_sbrackets.findall(template[side])
             fields.update(a)
 
-    fields = list(fields.difference(special_fields))
+    fields = fields.difference(special_fields)
+    fields = [{'name': field} for field in fields]
 
     return Model(id, name, fields, templates, css)
