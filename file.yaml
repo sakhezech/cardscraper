@@ -2,7 +2,7 @@ meta:
     package: default
     deck: default
     model: default
-    scraping: defalut
+    scraping: default
 
 package:
     name: PackageName
