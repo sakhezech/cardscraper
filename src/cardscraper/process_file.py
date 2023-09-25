@@ -1,9 +1,9 @@
 import yaml
 
-from cardscraper.deck import get_deck
-from cardscraper.model import get_model
-from cardscraper.package import package
-from cardscraper.scraping import get_notes
+from cardscraper.default.deck import get_deck
+from cardscraper.default.model import get_model
+from cardscraper.default.package import package
+from cardscraper.default.scraping import get_notes
 
 
 def process_file(path: str) -> None:

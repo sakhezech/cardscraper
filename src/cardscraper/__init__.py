@@ -1,0 +1,1 @@
+from cardscraper.process_file import process_file
