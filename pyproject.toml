@@ -2,6 +2,15 @@
 name = 'cardscraper'
 version = '0.0.1'
 
+[project.entry-points.'cardscraper.model']
+default = 'cardscraper.default:default_model'
+[project.entry-points.'cardscraper.scraping']
+default = 'cardscraper.default:default_notes'
+[project.entry-points.'cardscraper.deck']
+default = 'cardscraper.default:default_deck'
+[project.entry-points.'cardscraper.package']
+default = 'cardscraper.default:default_package'
+
 [build-system]
 requires = ['hatchling']
 build-backend = 'hatchling.build'

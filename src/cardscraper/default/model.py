@@ -3,7 +3,7 @@ import re
 from genanki import Model
 
 
-def get_model(model_config) -> Model:
+def default_model(model_config) -> Model:
     special_fields = {
         'Tags',
         'Type',

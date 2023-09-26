@@ -123,7 +123,7 @@ def make_note_from_storage(info_storage: InfoStorage, model: Model) -> Note:
     return Note(model, fields_for_note)
 
 
-def get_notes(scraping_config, model: Model) -> list[Note]:
+def default_notes(scraping_config, model: Model) -> list[Note]:
     notes: list[Note] = []
 
     urls: list[str] = scraping_config['urls']

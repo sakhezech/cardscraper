@@ -3,7 +3,7 @@ import os
 from genanki import Deck, Package
 
 
-def package(package_config, deck: Deck) -> None:
+def default_package(package_config, deck: Deck) -> None:
     name = package_config['name'].removesuffix('.apkg')
     out_path = package_config['output_path']
     media = [
