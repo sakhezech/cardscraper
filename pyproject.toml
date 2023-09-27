@@ -2,6 +2,9 @@
 name = 'cardscraper'
 version = '0.0.1'
 
+[project.scripts]
+cardscraper = 'cardscraper.__main__:main'
+
 [project.entry-points.'cardscraper.model']
 default = 'cardscraper.default:default_model'
 [project.entry-points.'cardscraper.scraping']
