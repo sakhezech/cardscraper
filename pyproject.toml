@@ -1,6 +1,11 @@
 [project]
 name = 'cardscraper'
 version = '0.0.1'
+dependencies = [
+  'genanki',
+  'pyyaml',
+  'playwright',
+]
 
 [project.scripts]
 cardscraper = 'cardscraper.__main__:main'
