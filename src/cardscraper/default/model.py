@@ -2,6 +2,8 @@ import re
 
 from genanki import Model
 
+in_sbraces = re.compile(r'{{(.*?)}}')
+
 
 def default_model(model_config) -> Model:
     special_fields = {
@@ -14,7 +16,6 @@ def default_model(model_config) -> Model:
         'FrontSide',
     }
 
-    in_sbrackets = re.compile(r'{{(.*?)}}')
     css = model_config['css']
     id = model_config['id']
     name = model_config['name']
@@ -24,7 +25,7 @@ def default_model(model_config) -> Model:
     fields = set()
     for template in templates:
         for side in ['qfmt', 'afmt']:
-            a = in_sbrackets.findall(template[side])
+            a = in_sbraces.findall(template[side])
             fields.update(a)
 
     fields = fields.difference(special_fields)
