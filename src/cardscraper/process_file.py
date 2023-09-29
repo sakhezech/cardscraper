@@ -14,11 +14,22 @@ def read_yaml(path: str):
     return conf
 
 
+def get_plugins():
+    return {
+        'model': entry_points(group='cardscraper.model'),
+        'scraping': entry_points(group='cardscraper.scraping'),
+        'deck': entry_points(group='cardscraper.deck'),
+        'package': entry_points(group='cardscraper.package'),
+    }
+
+
 def process_conf(conf) -> None:
-    model_plugins = entry_points(group='cardscraper.model')
-    notes_plugins = entry_points(group='cardscraper.scraping')
-    deck_plugins = entry_points(group='cardscraper.deck')
-    package_plugins = entry_points(group='cardscraper.package')
+
+    plugins = get_plugins()
+    model_plugins = plugins['model']
+    notes_plugins = plugins['scraping']
+    deck_plugins = plugins['deck']
+    package_plugins = plugins['package']
 
     meta_config = conf['meta']
 
