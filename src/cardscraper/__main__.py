@@ -3,6 +3,7 @@ import json
 
 from cardscraper.process_file import get_plugins, process_conf, read_yaml
 from cardscraper.template import TEMPLATE
+from cardscraper.version import VERSION
 
 
 class Commands:
@@ -71,12 +72,22 @@ def main():
         help='file name(s)',
     )
 
+    parser.add_argument(
+        '-v',
+        '--version',
+        action='store_true',
+        help='print program version',
+    )
+
     args = parser.parse_args()
 
     if args.command is not None:
         getattr(Commands, 'do_' + args.command)(args)
     else:
-        parser.print_help()
+        if args.version:
+            print(VERSION)
+        else:
+            parser.print_help()
 
 
 if __name__ == '__main__':
