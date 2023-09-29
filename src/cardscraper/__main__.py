@@ -1,7 +1,33 @@
 import argparse
 import json
 
-from cardscraper.process_file import process_conf, process_file
+from cardscraper.process_file import get_plugins, process_conf, read_yaml
+from cardscraper.template import TEMPLATE
+
+
+class Commands:
+    @staticmethod
+    def do_gen(args):
+        if not args.json:
+            for path in args.file:
+                process_conf(read_yaml(path))
+        else:
+            for jsonstr in args.file:
+                process_conf(json.loads(jsonstr))
+
+    @staticmethod
+    def do_init(args):
+        for path in args.file:
+            with open(path, 'w') as f:
+                f.write(TEMPLATE)
+
+    @staticmethod
+    def do_list(_):
+        plugins = get_plugins()
+        for name, impls in plugins.items():
+            print(f'{name.capitalize()} impls:')
+            for entry in impls:
+                print('-', entry.name)
 
 
 def main():
@@ -9,29 +35,48 @@ def main():
         prog='cardscraper',
         description='A tool for generating Anki cards by web scraping',
     )
+    subparsers = parser.add_subparsers(dest='command')
 
-    parser.add_argument(
+    gen_parser = subparsers.add_parser(
+        'gen',
+        help='generate Anki package',
+    )
+    init_parser = subparsers.add_parser(
+        'init',
+        help='generate template file(s)',
+    )
+    subparsers.add_parser(
+        'list',
+        help='list available implementations',
+    )
+
+    gen_parser.add_argument(
         'file',
         nargs='+',
         metavar='file',
         help='yaml instruction file(s)',
     )
 
-    parser.add_argument(
+    gen_parser.add_argument(
         '-j',
         '--json',
         action='store_true',
         help='pass json strings instead of files',
     )
 
+    init_parser.add_argument(
+        'file',
+        nargs='+',
+        metavar='file',
+        help='file name(s)',
+    )
+
     args = parser.parse_args()
 
-    if not args.json:
-        for path in args.file:
-            process_file(path)
+    if args.command is not None:
+        getattr(Commands, 'do_' + args.command)(args)
     else:
-        for jsonstr in args.file:
-            process_conf(json.loads(jsonstr))
+        parser.print_help()
 
 
 if __name__ == '__main__':
