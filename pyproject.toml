@@ -1,6 +1,6 @@
 [project]
 name = 'cardscraper'
-version = '0.0.1'
+dynamic = ['version']
 dependencies = [
   'genanki',
   'pyyaml',
@@ -22,6 +22,9 @@ default = 'cardscraper.default:default_package'
 [tool.isort]
 profile = 'black'
 line_length = 79
+
+[tool.hatch.version]
+path = 'src/cardscraper/version.py'
 
 [build-system]
 requires = ['hatchling']
