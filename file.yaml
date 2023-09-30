@@ -5,66 +5,91 @@ meta:
     scraping: default
 
 package:
-    name: PackageName
+    name: sample_package
     output_path: ./out/
-    media: ./media/
+    media: null
 
 deck:
-    name: My Deck
-    id: 123789456
+    name: Countries
+    id: 84269713
 
 model:
-    name: Model Name
-    id: 8527419630
+    name: Countries Model
+    id: 97138426
     css: |
-        #answer {
-            border-color: blue;
+        * {
+            color: #333;
+            background-color: #fffffa;
+        }
+        .q, .a {
+            text-align: center;
+        }
+        .q {
+            font-size: 5rem;
+            font-weight: 700;
+        }
+        .a {
+            font-size: 3rem;
         }
     templates:
-        Card1:
+        CountryToInfo:
             qfmt: |
-                {{Question}}
+                <div class='q'>
+                    {{Country}}
+                </div>
             afmt: |
                 {{FrontSide}}
-                \n\n
                 <hr id=answer>
-                \n\n
-                {{Answer}}
-                \n 
-                <a href='{{More}}'>
-                    about author
-                <a>
+                <div class='a'>
+                    {{Info}}
+                    <a href="https://en.wikipedia.org/w/index.php?search={{Country}}">
+                        more info
+                    </a>
+                </div>
+        CapitalToCountry:
+            qfmt: |
+                <div class='q'>
+                    {{Capital}}
+                </div>
+            afmt: |
+                {{FrontSide}}
+                <hr id=answer>
+                <div class='a'>
+                    {{Country}}<br>
+                    <a href="https://en.wikipedia.org/w/index.php?search={{Capital}}">
+                        more info
+                    </a>
+                </div>
 
 scraping:
     urls:
-        - https://quotes.toscrape.com/page/1/
-        - https://quotes.toscrape.com/page/2/
+        - https://www.scrapethissite.com/pages/simple/
     queries:
-        Quote:
-            query: .quote
+        CountryEntry:
+            query: .country
             all: true
             # eval: (e) => e.innerText
             # regex: null
             # format: '{}'
             children:
-                Question:
-                    query: .text
-                    # all: false
-                    # eval: (e) => e.innerText
-                    regex: “(.*?)”
-                    # format: '{}'
-                    # children: null
-                Answer:
-                    query: .author
+                Country:
+                    query: .country-name
                     # all: false
                     # eval: (e) => e.innerText
                     # regex: null
                     # format: '{}'
                     # children: null
-                More:
-                    query: .author + a
+                Info:
+                    query: .country-info
                     # all: false
-                    eval: (e) => e.getAttribute('href')
+                    eval: (e) => e.innerHTML
                     # regex: null
-                    format: https://quotes.toscrape.com{}/
+                    # format: '{}'
+                    # children: null
+                Capital:
+                    query: .country-capital
+                    # all: false
+                    # eval: (e) => e.innerText
+                    # regex: null
+                    # format: '{}'
                     # children: null
