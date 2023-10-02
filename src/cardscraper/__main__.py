@@ -26,9 +26,9 @@ class Commands:
     def do_list(_):
         plugins = get_plugins()
         for name, impls in plugins.items():
-            print(f'{name.capitalize()} impls:')
+            print(f'{name.capitalize()} implementations:')
             for entry in impls:
-                print('-', entry.name)
+                print('    -', entry.name)
 
 
 def main():
@@ -40,15 +40,18 @@ def main():
 
     gen_parser = subparsers.add_parser(
         'gen',
-        help='generate Anki package',
+        help='generate Anki packages',
+        description='Generates Anki packages from YAML instruction files',
     )
     init_parser = subparsers.add_parser(
         'init',
-        help='generate template file(s)',
+        help='generate template files',
+        description='Generates easily modifiable YAML instruction file templates',
     )
     subparsers.add_parser(
         'list',
         help='list available implementations',
+        description='Lists all available implementations',
     )
 
     gen_parser.add_argument(
