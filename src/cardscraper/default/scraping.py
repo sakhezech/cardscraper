@@ -130,11 +130,13 @@ def default_notes(scraping_config, model: Model) -> list[Note]:
     queries = [Query(k, **v) for k, v in scraping_config['queries'].items()]
 
     with sync_playwright() as pw:
+        print('Opening browser')
         browser = pw.chromium.launch()
         page = browser.new_page()
         for url in urls:
+            print(f'Processing {url}')
             page.goto(url)
             for query in queries:
                 go_through_query(query, page, notes, model, original=True)
-
+    print('Generated notes!')
     return notes

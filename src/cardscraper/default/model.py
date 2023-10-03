@@ -31,4 +31,6 @@ def default_model(model_config) -> Model:
     fields = fields.difference(special_fields)
     fields = [{'name': field} for field in fields]
 
-    return Model(id, name, fields, templates, css)
+    model = Model(id, name, fields, templates, css)
+    print('Generated model!')
+    return model

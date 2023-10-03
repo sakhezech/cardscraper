@@ -17,3 +17,4 @@ def default_package(package_config, deck: Deck) -> None:
     package = Package(deck, media)
     os.makedirs(out_path, exist_ok=True)
     package.write_to_file(os.path.join(out_path, name + '.apkg'))
+    print('Completed packaging!\nDone!')
