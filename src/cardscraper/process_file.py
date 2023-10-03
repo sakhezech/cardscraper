@@ -1,29 +1,11 @@
-from importlib.metadata import entry_points
+from typing import Callable
 
-import yaml
+from genanki import Deck, Model, Note
 
-
-def process_file(path: str):
-    conf = read_yaml(path)
-    process_conf(conf)
+from cardscraper.util import Conf, get_plugins
 
 
-def read_yaml(path: str):
-    with open(path, 'r') as f:
-        conf = yaml.load(f, yaml.Loader)
-    return conf
-
-
-def get_plugins():
-    return {
-        'model': entry_points(group='cardscraper.model'),
-        'scraping': entry_points(group='cardscraper.scraping'),
-        'deck': entry_points(group='cardscraper.deck'),
-        'package': entry_points(group='cardscraper.package'),
-    }
-
-
-def process_conf(conf) -> None:
+def process_conf(conf: Conf) -> None:
 
     plugins = get_plugins()
     model_plugins = plugins['model']
@@ -42,15 +24,14 @@ def process_conf(conf) -> None:
 
 
 def process_conf_manual(
-    conf, get_model, get_notes, get_deck, packaging
+    conf: Conf,
+    get_model: Callable[[Conf], Model],
+    get_notes: Callable[[Conf, Model], list[Note]],
+    get_deck: Callable[[Conf], Deck],
+    packaging: Callable[[Conf, Deck], None],
 ) -> None:
-    model_config = conf['model']
-    scraping_config = conf['scraping']
-    deck_cofig = conf['deck']
-    package_config = conf['package']
-
-    model = get_model(model_config)
-    notes = get_notes(scraping_config, model)
-    deck = get_deck(deck_cofig)
+    model = get_model(conf)
+    notes = get_notes(conf, model)
+    deck = get_deck(conf)
     deck.notes.extend(notes)
-    packaging(package_config, deck)
+    packaging(conf, deck)

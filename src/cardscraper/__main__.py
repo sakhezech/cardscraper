@@ -1,20 +1,20 @@
 import argparse
 import json
 
-from cardscraper.process_file import get_plugins, process_conf, read_yaml
+from cardscraper.process_file import process_conf
 from cardscraper.template import TEMPLATE
+from cardscraper.util import Conf, get_plugins, read_yaml
 from cardscraper.version import VERSION
 
 
 class Commands:
     @staticmethod
     def do_gen(args):
-        if not args.json:
-            for path in args.file:
-                process_conf(read_yaml(path))
-        else:
-            for jsonstr in args.file:
-                process_conf(json.loads(jsonstr))
+        load_func = json.loads if args.json else read_yaml
+        for f in args.file:
+            conf: Conf = load_func(f)
+            conf['args'] = args
+            process_conf(conf)
 
     @staticmethod
     def do_init(args):

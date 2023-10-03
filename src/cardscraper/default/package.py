@@ -2,8 +2,11 @@ import os
 
 from genanki import Deck, Package
 
+from cardscraper.util import Conf
 
-def default_package(package_config, deck: Deck) -> None:
+
+def default_package(conf: Conf, deck: Deck) -> None:
+    package_config = conf['package']
     name = package_config['name'].removesuffix('.apkg')
     out_path = package_config['output_path']
     if package_config.setdefault('media', None):
