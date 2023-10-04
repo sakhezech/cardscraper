@@ -33,7 +33,10 @@ class Query:
             self.children = [Query(k, **v) for k, v in children.items()]
 
     def __repr__(self) -> str:
-        return str(self.__dict__)
+        return (
+            f'{self.__class__.__name__}'
+            f'({", ".join([f"{k}={v}" for k,v in self.__dict__.items()])})'
+        )
 
 
 def go_through_query(
