@@ -27,11 +27,10 @@ def process_conf_manual(
     conf: Conf,
     get_model: Callable[[Conf], Model],
     get_notes: Callable[[Conf, Model], list[Note]],
-    get_deck: Callable[[Conf], Deck],
+    get_deck: Callable[[Conf, list[Note]], Deck],
     packaging: Callable[[Conf, Deck], None],
 ) -> None:
     model = get_model(conf)
     notes = get_notes(conf, model)
-    deck = get_deck(conf)
-    deck.notes.extend(notes)
+    deck = get_deck(conf, notes)
     packaging(conf, deck)
