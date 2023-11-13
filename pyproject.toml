@@ -1,12 +1,17 @@
 [project]
 name = 'cardscraper'
 readme = 'README.md'
+description = 'A tool for generating Anki cards by web scraping'
+license = { file = "LICENSE" }
 dynamic = ['version']
 dependencies = [
   'genanki',
   'pyyaml',
   'playwright',
 ]
+
+[project.urls]
+Homepage = 'https://github.com/sakhezech/cardscraper'
 
 [project.scripts]
 cardscraper = 'cardscraper.__main__:main'
