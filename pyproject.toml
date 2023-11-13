@@ -20,9 +20,10 @@ default = 'cardscraper.default:default_deck'
 [project.entry-points.'cardscraper.package']
 default = 'cardscraper.default:default_package'
 
-[tool.isort]
-profile = 'black'
-line_length = 79
+[tool.ruff]
+line-length = 79
+[tool.ruff.lint]
+extend-select = ['I', 'E501']
 
 [tool.hatch.version]
 path = 'src/cardscraper/version.py'
