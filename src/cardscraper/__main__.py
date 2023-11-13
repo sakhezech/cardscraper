@@ -46,7 +46,8 @@ def main():
     init_parser = subparsers.add_parser(
         'init',
         help='generate template files',
-        description='Generates easily modifiable YAML instruction file templates',
+        description='Generates easily modifiable '
+        'YAML instruction file templates',
     )
     subparsers.add_parser(
         'list',
