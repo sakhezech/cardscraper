@@ -1,5 +1,6 @@
 [project]
 name = 'cardscraper'
+readme = 'README.md'
 dynamic = ['version']
 dependencies = [
   'genanki',
