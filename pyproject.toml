@@ -27,6 +27,8 @@ default = 'cardscraper.default:default_package'
 
 [tool.ruff]
 line-length = 79
+[tool.ruff.format]
+quote-style = 'single'
 [tool.ruff.lint]
 extend-select = ['I', 'E501']
 

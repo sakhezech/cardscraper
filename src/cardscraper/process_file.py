@@ -6,7 +6,6 @@ from cardscraper.util import Conf, get_plugins
 
 
 def process_conf(conf: Conf) -> None:
-
     plugins = get_plugins()
     model_plugins = plugins['model']
     notes_plugins = plugins['scraping']
