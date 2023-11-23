@@ -3,7 +3,7 @@ import re
 from genanki import Model, Note
 from playwright.sync_api import ElementHandle, Page, sync_playwright
 
-from cardscraper.util import Conf
+from cardscraper.util import Config
 
 Elem = Page | ElementHandle
 InfoStorage = dict[str, str]
@@ -128,7 +128,7 @@ def make_note_from_storage(info_storage: InfoStorage, model: Model) -> Note:
     return Note(model, fields_for_note)
 
 
-def default_notes(conf: Conf, model: Model) -> list[Note]:
+def default_notes(conf: Config, model: Model) -> list[Note]:
     scraping_config = conf['scraping']
     notes: list[Note] = []
 

@@ -2,12 +2,12 @@ import re
 
 from genanki import Model
 
-from cardscraper.util import Conf
+from cardscraper.util import Config
 
 in_sbraces = re.compile(r'{{(.*?)}}')
 
 
-def default_model(conf: Conf) -> Model:
+def default_model(conf: Config) -> Model:
     model_config = conf['model']
     special_fields = {
         'Tags',

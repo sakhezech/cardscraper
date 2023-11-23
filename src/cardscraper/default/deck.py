@@ -1,9 +1,9 @@
 from genanki import Deck, Note
 
-from cardscraper.util import Conf
+from cardscraper.util import Config
 
 
-def default_deck(conf: Conf, notes: list[Note]) -> Deck:
+def default_deck(conf: Config, notes: list[Note]) -> Deck:
     deck_config = conf['deck']
     id = deck_config['id']
     name = deck_config['name']

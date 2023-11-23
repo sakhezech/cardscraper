@@ -4,7 +4,7 @@ from typing import Any, TypedDict
 import yaml
 
 
-def read_yaml(path: str) -> Any:
+def read_yaml_file(path: str) -> Any:
     with open(path, 'r') as f:
         conf = yaml.load(f, yaml.Loader)
     return conf
@@ -19,7 +19,7 @@ def get_plugins() -> dict[str, EntryPoints]:
     }
 
 
-class Conf(TypedDict):
+class Config(TypedDict):
     meta: Any
     model: Any
     scraping: Any

@@ -2,10 +2,10 @@ import os
 
 from genanki import Deck, Package
 
-from cardscraper.util import Conf
+from cardscraper.util import Config
 
 
-def default_package(conf: Conf, deck: Deck) -> None:
+def default_package(conf: Config, deck: Deck) -> None:
     package_config = conf['package']
     name = package_config['name'].removesuffix('.apkg')
     out_path = package_config['output_path']

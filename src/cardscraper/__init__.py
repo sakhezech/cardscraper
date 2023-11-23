@@ -1,10 +1,13 @@
-from cardscraper.process_file import process_conf, process_conf_manual
-from cardscraper.util import Conf, get_plugins, read_yaml
+from cardscraper.process_file import (
+    find_plugins_and_generate,
+    generate_anki_package,
+)
+from cardscraper.util import Config, get_plugins, read_yaml_file
 
 __all__ = [
-    'process_conf',
-    'process_conf_manual',
-    'Conf',
+    'find_plugins_and_generate',
+    'generate_anki_package',
+    'Config',
     'get_plugins',
-    'read_yaml',
+    'read_yaml_file',
 ]
