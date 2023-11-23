@@ -30,6 +30,11 @@ class Commands:
             for entry in impls:
                 print('    -', entry.name)
 
+    @staticmethod
+    def do_none(args):
+        if args.version:
+            print(VERSION)
+
 
 def main():
     parser = argparse.ArgumentParser(
@@ -80,18 +85,15 @@ def main():
         '-v',
         '--version',
         action='store_true',
-        help='print program version',
+        help='print program version and exit',
     )
 
     args = parser.parse_args()
 
-    if args.command is not None:
-        getattr(Commands, 'do_' + args.command)(args)
-    else:
-        if args.version:
-            print(VERSION)
-        else:
-            parser.print_help()
+    if args.command is None:
+        args.command = 'none'
+
+    getattr(Commands, 'do_' + args.command)(args)
 
 
 if __name__ == '__main__':
