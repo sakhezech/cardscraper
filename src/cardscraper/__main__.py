@@ -4,7 +4,7 @@ from typing import Any
 
 import yaml
 
-from cardscraper.process_file import (
+from cardscraper.generate import (
     Config,
     find_plugins_and_generate,
     get_plugins,

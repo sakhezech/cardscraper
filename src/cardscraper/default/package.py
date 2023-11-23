@@ -2,7 +2,7 @@ import os
 
 from genanki import Deck, Package
 
-from cardscraper.process_file import Config
+from cardscraper.generate import Config
 
 
 def default_package(conf: Config, deck: Deck) -> None:

@@ -1,5 +1,5 @@
 from cardscraper.__main__ import read_yaml_file
-from cardscraper.process_file import (
+from cardscraper.generate import (
     Config,
     find_plugins_and_generate,
     generate_anki_package,

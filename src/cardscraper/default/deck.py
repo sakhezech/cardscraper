@@ -1,6 +1,6 @@
 from genanki import Deck, Note
 
-from cardscraper.process_file import Config
+from cardscraper.generate import Config
 
 
 def default_deck(conf: Config, notes: list[Note]) -> Deck:
