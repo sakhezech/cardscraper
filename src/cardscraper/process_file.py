@@ -3,50 +3,51 @@ from typing import Any, Callable, TypedDict
 
 from genanki import Deck, Model, Note
 
+MODULES = {'model', 'scraping', 'deck', 'package'}
+
 
 def get_plugins() -> dict[str, EntryPoints]:
     return {
-        'model': entry_points(group='cardscraper.model'),
-        'scraping': entry_points(group='cardscraper.scraping'),
-        'deck': entry_points(group='cardscraper.deck'),
-        'package': entry_points(group='cardscraper.package'),
+        module: entry_points(group=f'cardscraper.{module}')
+        for module in MODULES
     }
 
 
 class Config(TypedDict):
-    meta: Any
-    model: Any
-    scraping: Any
-    deck: Any
-    package: Any
+    meta: dict
+    model: dict
+    scraping: dict
+    deck: dict
+    package: dict
     args: Any
 
 
 def find_plugins_and_generate(config: Config) -> None:
     plugins = get_plugins()
-    model_plugins = plugins['model']
-    notes_plugins = plugins['scraping']
-    deck_plugins = plugins['deck']
-    package_plugins = plugins['package']
 
-    meta_config = config['meta']
+    if 'meta' not in config:
+        config['meta'] = {}
+    for module in MODULES:
+        config['meta'].setdefault(module, 'default')
 
-    get_model = model_plugins[meta_config['model']].load()
-    get_notes = notes_plugins[meta_config['scraping']].load()
-    get_deck = deck_plugins[meta_config['deck']].load()
-    packaging = package_plugins[meta_config['package']].load()
+    meta = config['meta']
 
-    generate_anki_package(config, get_model, get_notes, get_deck, packaging)
+    impls = {
+        f'do_{module}': plugins[module][meta[module]].load()
+        for module in MODULES
+    }
+
+    generate_anki_package(config, **impls)
 
 
 def generate_anki_package(
     config: Config,
-    get_model: Callable[[Config], Model],
-    get_notes: Callable[[Config, Model], list[Note]],
-    get_deck: Callable[[Config, list[Note]], Deck],
-    packaging: Callable[[Config, Deck], None],
+    do_model: Callable[[Config], Model],
+    do_scraping: Callable[[Config, Model], list[Note]],
+    do_deck: Callable[[Config, list[Note]], Deck],
+    do_package: Callable[[Config, Deck], None],
 ) -> None:
-    model = get_model(config)
-    notes = get_notes(config, model)
-    deck = get_deck(config, notes)
-    packaging(config, deck)
+    model = do_model(config)
+    notes = do_scraping(config, model)
+    deck = do_deck(config, notes)
+    do_package(config, deck)
