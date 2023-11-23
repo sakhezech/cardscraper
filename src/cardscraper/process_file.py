@@ -1,8 +1,25 @@
-from typing import Callable
+from importlib.metadata import EntryPoints, entry_points
+from typing import Any, Callable, TypedDict
 
 from genanki import Deck, Model, Note
 
-from cardscraper.util import Config, get_plugins
+
+def get_plugins() -> dict[str, EntryPoints]:
+    return {
+        'model': entry_points(group='cardscraper.model'),
+        'scraping': entry_points(group='cardscraper.scraping'),
+        'deck': entry_points(group='cardscraper.deck'),
+        'package': entry_points(group='cardscraper.package'),
+    }
+
+
+class Config(TypedDict):
+    meta: Any
+    model: Any
+    scraping: Any
+    deck: Any
+    package: Any
+    args: Any
 
 
 def find_plugins_and_generate(config: Config) -> None:

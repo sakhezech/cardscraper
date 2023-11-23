@@ -3,7 +3,7 @@ import re
 from genanki import Model, Note
 from playwright.sync_api import ElementHandle, Page, sync_playwright
 
-from cardscraper.util import Config
+from cardscraper.process_file import Config
 
 Elem = Page | ElementHandle
 InfoStorage = dict[str, str]

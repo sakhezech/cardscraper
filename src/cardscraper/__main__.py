@@ -1,10 +1,22 @@
 import argparse
 import json
+from typing import Any
 
-from cardscraper.process_file import find_plugins_and_generate
+import yaml
+
+from cardscraper.process_file import (
+    Config,
+    find_plugins_and_generate,
+    get_plugins,
+)
 from cardscraper.template import TEMPLATE
-from cardscraper.util import Config, get_plugins, read_yaml_file
 from cardscraper.version import VERSION
+
+
+def read_yaml_file(path: str) -> Any:
+    with open(path, 'r') as f:
+        conf = yaml.load(f, yaml.Loader)
+    return conf
 
 
 class Commands:

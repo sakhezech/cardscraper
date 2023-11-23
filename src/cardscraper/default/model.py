@@ -2,7 +2,7 @@ import re
 
 from genanki import Model
 
-from cardscraper.util import Config
+from cardscraper.process_file import Config
 
 in_sbraces = re.compile(r'{{(.*?)}}')
 
