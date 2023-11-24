@@ -5,19 +5,19 @@ from genanki import Deck, Package
 from cardscraper.generate import Config
 
 
-def default_package(conf: Config, deck: Deck) -> None:
-    package_config = conf['package']
+def default_package(config: Config, deck: Deck) -> None:
+    package_config = config['package']
     name = package_config['name'].removesuffix('.apkg')
-    out_path = package_config['output_path']
-    if package_config.setdefault('media', None):
+    output_path = package_config.setdefault('output', '.')
+    media_path = package_config.setdefault('media', None)
+
+    if media_path:
         media = [
-            os.path.join(p, n)
-            for p, _, ns in os.walk(package_config['media'])
-            for n in ns
+            os.path.join(p, n) for p, _, ns in os.walk(media_path) for n in ns
         ]
     else:
         media = []
     package = Package(deck, media)
-    os.makedirs(out_path, exist_ok=True)
-    package.write_to_file(os.path.join(out_path, name + '.apkg'))
+    os.makedirs(output_path, exist_ok=True)
+    package.write_to_file(os.path.join(output_path, name + '.apkg'))
     print('Completed packaging!\nDone!')

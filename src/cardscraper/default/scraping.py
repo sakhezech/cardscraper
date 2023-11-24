@@ -87,12 +87,22 @@ def validate_query_tree(query: Query) -> bool:
 
 def default_notes(config: Config, model: Model) -> list[Note]:
     scraping_config = config['scraping']
+    urls = scraping_config['urls']
+    agent = scraping_config.setdefault('agent', None)
+
+    if agent is None:
+        agent = (
+            'Mozilla/5.0 (X11; Linux x86_64; rv:120.0) '
+            'Gecko/20100101 Firefox/120.0'
+        )
+    headers = {'User-Agent': agent}
+
     queries = [Query(**child) for child in scraping_config['queries']]
     for query in queries:
         validate_query_tree(query)
     notes = []
-    for url in scraping_config['urls']:
-        res = requests.get(url)
+    for url in urls:
+        res = requests.get(url, headers=headers)
         soup = BeautifulSoup(res.text, 'html.parser')
         for query in queries:
             notes.extend(generate_notes_for_quote(soup, query, model))

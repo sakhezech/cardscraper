@@ -7,8 +7,13 @@ from cardscraper.generate import Config
 in_sbraces = re.compile(r'{{(.*?)}}')
 
 
-def default_model(conf: Config) -> Model:
-    model_config = conf['model']
+def default_model(config: Config) -> Model:
+    model_config = config['model']
+    id = model_config['id']
+    name = model_config['name']
+    css = model_config.setdefault('css', '')
+    templates = model_config['templates']
+
     special_fields = {
         'Tags',
         'Type',
@@ -18,12 +23,6 @@ def default_model(conf: Config) -> Model:
         'Card',
         'FrontSide',
     }
-
-    css = model_config['css']
-    id = model_config['id']
-    name = model_config['name']
-    templates = model_config['templates']
-
     fields = set()
     for template in templates:
         for side in ['qfmt', 'afmt']:
