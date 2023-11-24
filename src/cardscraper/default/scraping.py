@@ -30,7 +30,7 @@ class Query:
         if children is None or not children:
             self.children: list[Query] = []
         else:
-            self.children = [Query(k, **v) for k, v in children.items()]
+            self.children = [Query(**query) for query in children]
 
     def __repr__(self) -> str:
         return (
@@ -133,7 +133,7 @@ def default_notes(conf: Config, model: Model) -> list[Note]:
     notes: list[Note] = []
 
     urls: list[str] = scraping_config['urls']
-    queries = [Query(k, **v) for k, v in scraping_config['queries'].items()]
+    queries = [Query(**query) for query in scraping_config['queries']]
 
     with sync_playwright() as pw:
         print('Opening browser')

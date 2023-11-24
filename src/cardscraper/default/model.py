@@ -22,8 +22,7 @@ def default_model(conf: Config) -> Model:
     css = model_config['css']
     id = model_config['id']
     name = model_config['name']
-
-    templates = [{'name': k} | v for k, v in model_config['templates'].items()]
+    templates = model_config['templates']
 
     fields = set()
     for template in templates:
