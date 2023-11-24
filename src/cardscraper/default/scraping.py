@@ -1,12 +1,8 @@
-import re
-
+import requests
+from bs4 import BeautifulSoup, Tag
 from genanki import Model, Note
-from playwright.sync_api import ElementHandle, Page, sync_playwright
 
 from cardscraper.generate import Config
-
-Elem = Page | ElementHandle
-InfoStorage = dict[str, str]
 
 
 class Query:
@@ -14,135 +10,83 @@ class Query:
         self,
         name: str,
         query: str,
-        all: bool = False,
-        eval: str = '(e) => e.innerText',
+        many: bool = False,
         regex: str | None = None,
-        format: str = '{}',
         children: dict | None = None,
     ) -> None:
+        if children is None:
+            children = {}
         self.name = name
         self.query = query
-        self.all = all
-        self.eval = eval
+        self.many = many
         self.regex = regex
-        self.format = format
-
-        if children is None or not children:
-            self.children: list[Query] = []
-        else:
-            self.children = [Query(**query) for query in children]
-
-    def __repr__(self) -> str:
-        return (
-            f'{self.__class__.__name__}'
-            f'({", ".join([f"{k}={v}" for k,v in self.__dict__.items()])})'
-        )
+        self.children = [Query(**child) for child in children]
 
 
-def go_through_query(
+def generate_notes_for_quote(
+    tag: Tag,
     query: Query,
-    handle: Elem,
-    notes: list[Note],
     model: Model,
-    info_storage: InfoStorage | None = None,
-    saved_all: Query | None = None,
-    saved_handle: Elem | None = None,
-    original: bool = False,
-) -> tuple[Query | None, Elem | None]:
-    """
-    Goes through the query recursively and appends the created notes to notes.
+    notes: list[Note] | None = None,
+    info: dict | None = None,
+) -> list[Note]:
+    if notes is None:
+        notes = []
+    if info is None:
+        info = {}
 
-    RegEx has re.DOTALL enabled.
-    """
-    if info_storage is None:
-        info_storage = {}
+    selected_tags = tag.select(query.query)
+    # non 'many' queries only get the first selected tag
+    if not query.many and selected_tags:
+        selected_tags = selected_tags[:1]
 
-    if query.all:
-        elems = handle.query_selector_all(query.query)
-    else:
-        elem = handle.query_selector(query.query)
+    for selected_tag in selected_tags:
+        # dont forget to add the regex thing
+        info[query.name] = selected_tag.text
 
-        if elem is None:
-            elems: list[ElementHandle] = []
-        else:
-            elems = [elem]
+        normal_queries = [q for q in query.children if not q.many]
+        many_queries = [q for q in query.children if q.many]
 
-    for elem in elems:
-        saved_all = saved_handle = None
+        # this ensures that 'many' query will be processed last
+        for child in normal_queries + many_queries:
+            generate_notes_for_quote(selected_tag, child, model, notes, info)
 
-        val = elem.evaluate(query.eval)
-        if query.regex is not None:
-            val = re.search(query.regex, val, re.DOTALL)
-            if val is None:
-                val = ''
-            else:
-                val = val.group(1)
-        val = query.format.format(val)
-        info_storage[query.name] = val
+        if not many_queries and query.many:
+            notes.append(make_note_from_info(info, model))
 
-        for ch in query.children:
-            if ch.all:
-                if saved_all is not None:
-                    raise ValueError(
-                        'Having two or more all queries not under each other'
-                        + ' is undefined behavior. The offending queries are '
-                        + f'{saved_all.name} and {ch.name}'
-                    )
-                else:
-                    saved_all = ch
-                    saved_handle = elem
-            else:
-                return_all, return_handle = go_through_query(
-                    ch,
-                    elem,
-                    notes,
-                    model,
-                    info_storage,
-                    saved_all,
-                    saved_handle,
-                    original=False,
-                )
-                saved_all = saved_all or return_all
-                saved_handle = saved_handle or return_handle
-
-        if saved_all is None or saved_handle is None:
-            if original:
-                notes.append(make_note_from_storage(info_storage, model))
-        else:
-            if original:
-                go_through_query(
-                    saved_all,
-                    saved_handle,
-                    notes,
-                    model,
-                    info_storage,
-                    original=True,
-                )
-    return saved_all, saved_handle
+    return notes
 
 
-def make_note_from_storage(info_storage: InfoStorage, model: Model) -> Note:
-    field_list = [field for fd in model.fields for _, field in fd.items()]
-    fields_for_note = [info_storage[field] for field in field_list]
-
+def make_note_from_info(info: dict, model: Model) -> Note:
+    model_field_names = [
+        field_name for fd in model.fields for _, field_name in fd.items()
+    ]
+    fields_for_note = [info[field_name] for field_name in model_field_names]
     return Note(model, fields_for_note)
 
 
-def default_notes(conf: Config, model: Model) -> list[Note]:
-    scraping_config = conf['scraping']
-    notes: list[Note] = []
+def validate_query_tree(query: Query) -> bool:
+    queries_with_many_under = [
+        validate_query_tree(child) for child in query.children
+    ].count(True)
+    if queries_with_many_under > 1:
+        raise ValueError(
+            "Having two or more 'many' queries not "
+            'under each other is undefined behavior.'
+        )
+    return query.many | bool(queries_with_many_under)
 
-    urls: list[str] = scraping_config['urls']
-    queries = [Query(**query) for query in scraping_config['queries']]
 
-    with sync_playwright() as pw:
-        print('Opening browser')
-        browser = pw.chromium.launch()
-        page = browser.new_page()
-        for url in urls:
-            print(f'Processing {url}')
-            page.goto(url)
-            for query in queries:
-                go_through_query(query, page, notes, model, original=True)
+def default_notes(config: Config, model: Model) -> list[Note]:
+    scraping_config = config['scraping']
+    queries = [Query(**child) for child in scraping_config['queries']]
+    for query in queries:
+        validate_query_tree(query)
+    notes = []
+    for url in scraping_config['urls']:
+        res = requests.get(url)
+        soup = BeautifulSoup(res.text, 'html.parser')
+        for query in queries:
+            notes.extend(generate_notes_for_quote(soup, query, model))
     print('Generated notes!')
     return notes

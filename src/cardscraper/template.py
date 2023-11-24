@@ -48,7 +48,7 @@ scraping:
   queries:
     - name: Entry
       query: .entry
-      all: true
+      many: true
       children:
         - name: Question
           query: .question

@@ -4,11 +4,7 @@ readme = 'README.md'
 description = 'A tool for generating Anki cards by web scraping'
 license = { file = "LICENSE" }
 dynamic = ['version']
-dependencies = [
-  'genanki',
-  'pyyaml',
-  'playwright',
-]
+dependencies = ['genanki', 'pyyaml', 'beautifulsoup4', 'requests']
 
 [project.urls]
 Homepage = 'https://github.com/sakhezech/cardscraper'
