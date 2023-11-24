@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup, Tag
 from genanki import Model, Note
+from genanki.note import re
 
 from cardscraper.generate import Config
 
@@ -41,8 +42,15 @@ def generate_notes_for_quote(
         selected_tags = selected_tags[:1]
 
     for selected_tag in selected_tags:
-        # dont forget to add the regex thing
-        info[query.name] = selected_tag.text
+        if query.regex is not None:
+            text = re.search(query.regex, selected_tag.text, re.DOTALL)
+            if text is None:
+                text = ''
+            else:
+                text = text.group(1)
+            info[query.name] = text
+        else:
+            info[query.name] = selected_tag.text
 
         normal_queries = [q for q in query.children if not q.many]
         many_queries = [q for q in query.children if q.many]
