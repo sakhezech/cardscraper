@@ -4,13 +4,13 @@ from typing import Any
 
 import yaml
 
+from cardscraper.__version__ import __version__
 from cardscraper.generate import (
     Config,
     find_plugins_and_generate,
     get_plugins,
 )
 from cardscraper.template import TEMPLATE
-from cardscraper.version import VERSION
 
 
 def read_yaml_file(path: str) -> Any:
@@ -45,7 +45,7 @@ class Commands:
     @staticmethod
     def do_none(args):
         if args.version:
-            print(VERSION)
+            print(__version__)
 
 
 def main():

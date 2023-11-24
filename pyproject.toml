@@ -33,7 +33,7 @@ quote-style = 'single'
 extend-select = ['I', 'E501']
 
 [tool.hatch.version]
-path = 'src/cardscraper/version.py'
+path = 'src/cardscraper/__version__.py'
 
 [build-system]
 requires = ['hatchling']
