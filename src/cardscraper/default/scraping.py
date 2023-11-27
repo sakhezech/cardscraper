@@ -1,7 +1,8 @@
+import re
+
 import requests
 from bs4 import BeautifulSoup, Tag
 from genanki import Model, Note
-from genanki.note import re
 
 from cardscraper.generate import Config
 
