@@ -7,8 +7,9 @@ import yaml
 from cardscraper.__version__ import __version__
 from cardscraper.generate import (
     Config,
+    Module,
     find_plugins_and_generate,
-    get_plugins,
+    find_plugins_by_group,
 )
 from cardscraper.template import TEMPLATE
 
@@ -36,11 +37,11 @@ class Commands:
 
     @staticmethod
     def do_list(_):
-        plugins = get_plugins()
-        for name, impls in plugins.items():
-            print(f'{name.capitalize()} implementations:')
-            for entry in impls:
-                print('    -', entry.name)
+        for hello in Module:
+            points = find_plugins_by_group(hello)
+            print(f'Available {hello} modules:')
+            for point in points:
+                print(f'\t- {point.name}')
 
     @staticmethod
     def do_none(args):

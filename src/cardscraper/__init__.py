@@ -1,15 +1,19 @@
 from cardscraper.__main__ import read_yaml_file
 from cardscraper.generate import (
     Config,
+    Module,
     find_plugins_and_generate,
+    find_plugins_by_group,
     generate_anki_package,
-    get_plugins,
+    get_plugin_by_group_and_name,
 )
 
 __all__ = [
-    'find_plugins_and_generate',
-    'generate_anki_package',
-    'Config',
-    'get_plugins',
     'read_yaml_file',
+    'Config',
+    'Module',
+    'find_plugins_and_generate',
+    'find_plugins_by_group',
+    'generate_anki_package',
+    'get_plugin_by_group_and_name',
 ]
