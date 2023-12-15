@@ -7,7 +7,7 @@ import yaml
 from cardscraper.__version__ import __version__
 from cardscraper.generate import (
     Config,
-    Module,
+    Step,
     find_plugins_and_generate,
     find_plugins_by_group,
 )
@@ -36,11 +36,11 @@ class Commands:
 
     @staticmethod
     def do_list(_):
-        for hello in Module:
-            points = find_plugins_by_group(hello)
-            print(f'Available {hello} modules:')
+        for step in Step:
+            points = find_plugins_by_group(step)
+            print(f'Available functions for {step}:')
             for point in points:
-                print(f'\t- {point.name}')
+                print(f'  - {point.name}')
 
     @staticmethod
     def do_none(args):
@@ -51,32 +51,31 @@ class Commands:
 def main():
     parser = argparse.ArgumentParser(
         prog='cardscraper',
-        description='A tool for generating Anki cards by web scraping',
+        description='A tool for generating Anki packages by webscraping',
     )
     subparsers = parser.add_subparsers(dest='command')
 
     gen_parser = subparsers.add_parser(
         'gen',
         help='generate Anki packages',
-        description='Generates Anki packages from YAML instruction files',
+        description='Generates Anki packages from input files',
     )
     init_parser = subparsers.add_parser(
         'init',
-        help='generate template files',
-        description='Generates easily modifiable '
-        'YAML instruction file templates',
+        help='generate skeleton input files',
+        description='Generates easily modifiable input file skeletons',
     )
     subparsers.add_parser(
         'list',
-        help='list available implementations',
-        description='Lists all available implementations',
+        help='list available functions',
+        description='List all available functions for each step',
     )
 
     gen_parser.add_argument(
         'file',
         nargs='+',
         metavar='file',
-        help='yaml instruction file(s)',
+        help='yaml input file(s)',
     )
 
     gen_parser.add_argument(

@@ -5,7 +5,7 @@ from typing import Callable, TypedDict
 from genanki import Deck, Model, Note
 
 
-class Module(str, Enum):
+class Step(str, Enum):
     def __str__(self) -> str:
         return self.value
 
@@ -15,11 +15,11 @@ class Module(str, Enum):
     PACKAGE = 'package'
 
 
-def find_plugins_by_group(group: Module) -> EntryPoints:
+def find_plugins_by_group(group: Step) -> EntryPoints:
     return entry_points(group=f'cardscraper.{group}')
 
 
-def get_plugin_by_group_and_name(group: Module, name: str) -> Callable:
+def get_function_by_group_and_name(group: Step, name: str) -> Callable:
     return find_plugins_by_group(group)[name].load()
 
 
@@ -34,19 +34,17 @@ class Config(TypedDict):
 def find_plugins_and_generate(config: Config) -> None:
     if 'meta' not in config:
         config['meta'] = {}
-    for module in Module:
+    for module in Step:
         config['meta'].setdefault(module, 'default')
 
     meta = config['meta']
 
-    get_model = get_plugin_by_group_and_name(Module.MODEL, meta[Module.MODEL])
-    get_notes = get_plugin_by_group_and_name(
-        Module.SCRAPING, meta[Module.SCRAPING]
+    get_model = get_function_by_group_and_name(Step.MODEL, meta[Step.MODEL])
+    get_notes = get_function_by_group_and_name(
+        Step.SCRAPING, meta[Step.SCRAPING]
     )
-    get_deck = get_plugin_by_group_and_name(Module.DECK, meta[Module.DECK])
-    package = get_plugin_by_group_and_name(
-        Module.PACKAGE, meta[Module.PACKAGE]
-    )
+    get_deck = get_function_by_group_and_name(Step.DECK, meta[Step.DECK])
+    package = get_function_by_group_and_name(Step.PACKAGE, meta[Step.PACKAGE])
 
     generate_anki_package(config, get_model, get_notes, get_deck, package)
 
