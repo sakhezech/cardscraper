@@ -1,74 +1,39 @@
 # cardscraper
 
-`cardscraper` is a tool for generating Anki packages by webscraping.
+A tool for generating Anki packages by webscraping.
 
-## use me
+## Installation
 
-install `cardscraper` from [PyPI](https://pypi.org/project/cardscraper/)
+install from [PyPI](https://pypi.org/project/cardscraper/)
 
 ```
 pip install cardscraper
 ```
 
-generate a skeleton input file
+## Basic usage
 
-```
-cardscraper init hello.yaml
-```
+`cardscraper ...` or `python -m cardscraper ...`
 
-edit the file and generate the Anki package
+cardscraper has 3 main subcommands:
 
-```
-cardscraper gen hello.yaml
-```
+- `cardscraper gen` - takes in [input files](#input-file-format) and generates Anki packages
+- `cardscraper init` - generates skeleton [input files](#input-file-format)
+- `cardscraper list` - lists all available functions for each step (cardscraper has a [plugin system](#plugin-system))
 
-## editing the file
+and you can always use `cardscraper <subcommand> -h`
 
-`cardscraper` takes in YAML files as input
+I recommend doing something like:
 
-#### quick example
+1. `cardscraper init hello.yaml`
+2. edit the file to suit your needs
+3. `cardscraper gen hello.yaml`
 
-[go down](#full-explanation) for an in-depth one
+## Input file format
 
-```yaml
-scraping:
-  urls:
-    - https://www.scrapethissite.com/pages/simple/
-  queries:
-    - name: Entry
-      query: .country
-      many: true
-      children:
-        - name: Info
-          query: .country-info
-        - name: Name
-          query: .country-name
-
-model:
-  name: My Model
-  id: 123 # make this unique
-  templates:
-    - name: My Card Template
-      qfmt: |
-        {{Info}}
-      afmt: |
-        {{FrontSide}}
-        <hr id='answer'>
-        {{Name}}
-
-deck:
-  name: My Deck
-  id: 987 # make this unique
-
-package:
-  name: sample_package.apkg
-  output: ./output/
-```
-
-#### full explanation
+cardscraper takes in YAML files as input
 
 ```yaml
-# here you can specify which module to use for each step
+# here you can specify which function to use for each step
 # (every one defaults to 'default')
 meta:
   # controls package details and package dumping
@@ -184,22 +149,22 @@ scraping:
           children: null
 ```
 
-## using in code
+## Using in code
 
 ```py
-from cardscraper import generate_anki_package, get_plugin_by_group_and_name
-from cardscraper.__main__ import read_yaml_file
-from cardscraper.generate import Config, Module
+import yaml
+from cardscraper import generate_anki_package, get_function_by_group_and_name
+from cardscraper.generate import Config, Step
 from genanki import Model, Note
 
 if __name__ == '__main__':
-    config = read_yaml_file('/path/to/config.yaml')
-    # or
-    # config: Config = {...}
+    with open('/path/to/config.yaml', 'r') as f:
+        config: Config = yaml.load(f, yaml.Loader)
+    # or you can make a config manually
 
-    get_model = get_plugin_by_group_and_name(Module.MODEL, 'default')
-    get_deck = get_plugin_by_group_and_name(Module.DECK, 'default')
-    get_package = get_plugin_by_group_and_name(Module.PACKAGE, 'default')
+    get_model = get_function_by_group_and_name(Step.MODEL, 'default')
+    get_deck = get_function_by_group_and_name(Step.DECK, 'default')
+    get_package = get_function_by_group_and_name(Step.PACKAGE, 'default')
 
     def get_notes(config: Config, model: Model) -> list[Note]:
         notes = []
@@ -209,9 +174,9 @@ if __name__ == '__main__':
     generate_anki_package(config, get_model, get_notes, get_deck, get_package)
 ```
 
-## plugin system
+## Plugin system
 
-you can add custom modules by exposing `cardscraper.x` entry point in your package
+you can add custom functions by exposing `cardscraper.step` entry point in your package
 
 ```toml
 [project.entry-points.'cardscraper.model']
