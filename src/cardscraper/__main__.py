@@ -26,7 +26,6 @@ class Commands:
         load_func = json.loads if args.json else read_yaml_file
         for f in args.file:
             conf: Config = load_func(f)
-            conf['args'] = args
             find_plugins_and_generate(conf)
 
     @staticmethod

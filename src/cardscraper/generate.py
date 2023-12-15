@@ -1,6 +1,6 @@
 from enum import Enum
 from importlib.metadata import EntryPoints, entry_points
-from typing import Any, Callable, TypedDict
+from typing import Callable, TypedDict
 
 from genanki import Deck, Model, Note
 
@@ -29,7 +29,6 @@ class Config(TypedDict):
     scraping: dict
     deck: dict
     package: dict
-    args: Any
 
 
 def find_plugins_and_generate(config: Config) -> None:
