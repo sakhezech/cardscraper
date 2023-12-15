@@ -1,21 +1,14 @@
-TEMPLATE = """meta:
-  package: default
-  deck: default
-  model: default
-  scraping: default
-
-package:
-  name: Package
-  output_path: ./out/
-  media: null
+TEMPLATE = """package:
+  name: package_name
+  output: ./output/
 
 deck:
   name: Deck
-  id: # PUT ID HERE
+  id: # put unique ID here
 
 model:
   name: Model
-  id: # PUT ID HERE
+  id: # put unique ID here
   css: |
     .question, .answer {
         text-align: center;
@@ -28,7 +21,7 @@ model:
         font-size: 3rem;
     }
   templates:
-    - name: Card
+    - name: Front
       qfmt: |
         <div class='question'>
         {{Question}}
@@ -42,16 +35,16 @@ model:
 
 scraping:
   urls:
-    -  # PUT AT LEAST ONE URL HERE
-    # - URL 2
-    # - etc
+    - # url 1
+    # - url 2
+    # - url 3
   queries:
-    - name: Entry
-      query: .entry
+    - name: Country
+      query: .country
       many: true
       children:
         - name: Question
-          query: .question
+          query: .country-info
+          regex: (Area .*)$
         - name: Answer
-          query: .answer
-"""
+          query: .country-name"""
