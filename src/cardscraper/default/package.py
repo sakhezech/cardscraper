@@ -1,11 +1,12 @@
 import os
+from pathlib import Path
 
 from genanki import Deck, Package
 
 from cardscraper.generate import Config
 
 
-def default_package(config: Config, deck: Deck) -> None:
+def default_package(config: Config, deck: Deck) -> tuple[Package, Path]:
     package_config = config['package']
     name = package_config['name'].removesuffix('.apkg')
     output_path = package_config.setdefault('output', '.')
@@ -18,6 +19,6 @@ def default_package(config: Config, deck: Deck) -> None:
     else:
         media = []
     package = Package(deck, media)
-    os.makedirs(output_path, exist_ok=True)
-    package.write_to_file(os.path.join(output_path, name + '.apkg'))
-    print('Completed packaging!\nDone!')
+    path = Path(os.path.join(output_path, name + '.apkg'))
+    print('Generated package!')
+    return package, path

@@ -1,8 +1,9 @@
 from enum import Enum
 from importlib.metadata import EntryPoints, entry_points
+from pathlib import Path
 from typing import Callable, TypedDict
 
-from genanki import Deck, Model, Note
+from genanki import Deck, Model, Note, Package
 
 
 class Step(str, Enum):
@@ -44,9 +45,11 @@ def find_plugins_and_generate(config: Config) -> None:
         Step.SCRAPING, meta[Step.SCRAPING]
     )
     get_deck = get_function_by_group_and_name(Step.DECK, meta[Step.DECK])
-    package = get_function_by_group_and_name(Step.PACKAGE, meta[Step.PACKAGE])
+    get_package = get_function_by_group_and_name(
+        Step.PACKAGE, meta[Step.PACKAGE]
+    )
 
-    generate_anki_package(config, get_model, get_notes, get_deck, package)
+    generate_anki_package(config, get_model, get_notes, get_deck, get_package)
 
 
 def generate_anki_package(
@@ -54,9 +57,12 @@ def generate_anki_package(
     get_model: Callable[[Config], Model],
     get_notes: Callable[[Config, Model], list[Note]],
     get_deck: Callable[[Config, list[Note]], Deck],
-    package: Callable[[Config, Deck], None],
+    get_package: Callable[[Config, Deck], tuple[Package, Path]],
 ) -> None:
     model = get_model(config)
     notes = get_notes(config, model)
     deck = get_deck(config, notes)
-    package(config, deck)
+    package, path = get_package(config, deck)
+
+    path.parent.mkdir(exist_ok=True)
+    package.write_to_file(path)
