@@ -1,6 +1,6 @@
 import argparse
 import json
-from typing import Any
+from typing import Any, Sequence
 
 import yaml
 
@@ -48,7 +48,7 @@ class Commands:
             print(__version__)
 
 
-def main():
+def main(argstr: Sequence[str] | None = None):
     parser = argparse.ArgumentParser(
         prog='cardscraper',
         description='A tool for generating Anki packages by webscraping',
@@ -99,7 +99,7 @@ def main():
         help='print program version and exit',
     )
 
-    args = parser.parse_args()
+    args = parser.parse_args(argstr)
 
     if args.command is None:
         args.command = 'none'
