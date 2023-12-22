@@ -48,7 +48,7 @@ class Commands:
             print(__version__)
 
 
-def main(argstr: Sequence[str] | None = None):
+def main(arglist: Sequence[str] | None = None):
     parser = argparse.ArgumentParser(
         prog='cardscraper',
         description='A tool for generating Anki packages by webscraping',
@@ -99,7 +99,7 @@ def main(argstr: Sequence[str] | None = None):
         help='print program version and exit',
     )
 
-    args = parser.parse_args(argstr)
+    args = parser.parse_args(arglist)
 
     if args.command is None:
         args.command = 'none'
