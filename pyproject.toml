@@ -10,7 +10,7 @@ dependencies = ['genanki', 'pyyaml', 'beautifulsoup4', 'requests']
 Homepage = 'https://github.com/sakhezech/cardscraper'
 
 [project.scripts]
-cardscraper = 'cardscraper.__main__:main'
+cardscraper = 'cardscraper.__main__:cli'
 
 [project.entry-points.'cardscraper.model']
 default = 'cardscraper.default:default_model'

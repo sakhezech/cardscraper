@@ -42,13 +42,8 @@ class Commands:
             for point in points:
                 print(f'  - {point.name}')
 
-    @staticmethod
-    def do_none(args):
-        if args.version:
-            print(__version__)
 
-
-def main(arglist: Sequence[str] | None = None):
+def cli(argv: Sequence[str] | None = None):
     parser = argparse.ArgumentParser(
         prog='cardscraper',
         description='A tool for generating Anki packages by webscraping',
@@ -95,17 +90,18 @@ def main(arglist: Sequence[str] | None = None):
     parser.add_argument(
         '-v',
         '--version',
-        action='store_true',
-        help='print program version and exit',
+        action='version',
+        version=__version__,
     )
 
-    args = parser.parse_args(arglist)
+    args = parser.parse_args(argv)
 
     if args.command is None:
-        args.command = 'none'
+        parser.print_help()
+        return
 
     getattr(Commands, 'do_' + args.command)(args)
 
 
 if __name__ == '__main__':
-    main()
+    cli()
