@@ -1,4 +1,3 @@
-from cardscraper.__main__ import read_yaml_file
 from cardscraper.generate import (
     Config,
     Step,
@@ -9,7 +8,6 @@ from cardscraper.generate import (
 )
 
 __all__ = [
-    'read_yaml_file',
     'Config',
     'Step',
     'find_plugins_and_generate',
