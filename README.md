@@ -153,8 +153,12 @@ scraping:
 
 ```py
 import yaml
-from cardscraper import generate_anki_package, get_function_by_group_and_name
-from cardscraper.generate import Config, Step
+from cardscraper import (
+    Config,
+    Step,
+    generate_anki_package,
+    get_function_by_group_and_name,
+)
 from genanki import Model, Note
 
 if __name__ == '__main__':
