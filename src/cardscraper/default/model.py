@@ -1,3 +1,4 @@
+import logging
 import re
 
 from genanki import Model
@@ -33,5 +34,6 @@ def get_model(config: Config) -> Model:
     fields = [{'name': field} for field in fields]
 
     model = Model(id, name, fields, templates, css)
-    print('Generated model!')
+    logger = logging.getLogger('cardscraper')
+    logger.info('Generated model!')
     return model

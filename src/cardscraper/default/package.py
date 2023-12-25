@@ -1,3 +1,4 @@
+import logging
 import os
 from pathlib import Path
 
@@ -20,5 +21,6 @@ def get_package(config: Config, deck: Deck) -> tuple[Package, Path]:
         media = []
     package = Package(deck, media)
     path = Path(os.path.join(output_path, name + '.apkg'))
-    print('Generated package!')
+    logger = logging.getLogger('cardscraper')
+    logger.info('Generated package!')
     return package, path

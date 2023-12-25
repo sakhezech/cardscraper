@@ -1,4 +1,5 @@
 import argparse
+import logging
 from typing import Sequence
 
 import yaml
@@ -14,6 +15,10 @@ from cardscraper.template import TEMPLATE
 
 
 def cli(argv: Sequence[str] | None = None):
+    logger = logging.getLogger('cardscraper')
+    logger.addHandler(logging.StreamHandler())
+    logger.setLevel(20)
+
     parser = argparse.ArgumentParser(
         prog='cardscraper',
         description='A tool for generating Anki packages by webscraping',

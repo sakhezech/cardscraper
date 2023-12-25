@@ -1,3 +1,4 @@
+import logging
 import re
 
 import requests
@@ -108,5 +109,6 @@ def get_notes(config: Config, model: Model) -> list[Note]:
         soup = BeautifulSoup(res.text, 'html.parser')
         for query in queries:
             notes.extend(generate_notes_for_quote(soup, query, model))
-    print('Generated notes!')
+    logger = logging.getLogger('cardscraper')
+    logger.info('Generated notes!')
     return notes

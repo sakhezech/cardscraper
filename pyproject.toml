@@ -13,13 +13,13 @@ Homepage = 'https://github.com/sakhezech/cardscraper'
 cardscraper = 'cardscraper.__main__:cli'
 
 [project.entry-points.'cardscraper.model']
-default = 'cardscraper.default:default_model'
+default = 'cardscraper.default:get_model'
 [project.entry-points.'cardscraper.scraping']
-default = 'cardscraper.default:default_notes'
+default = 'cardscraper.default:get_notes'
 [project.entry-points.'cardscraper.deck']
-default = 'cardscraper.default:default_deck'
+default = 'cardscraper.default:get_deck'
 [project.entry-points.'cardscraper.package']
-default = 'cardscraper.default:default_package'
+default = 'cardscraper.default:get_package'
 
 [tool.ruff]
 line-length = 79

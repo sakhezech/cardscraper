@@ -1,3 +1,5 @@
+import logging
+
 from genanki import Deck, Note
 
 from cardscraper.generate import Config
@@ -10,5 +12,6 @@ def get_deck(config: Config, notes: list[Note]) -> Deck:
 
     deck = Deck(id, name)
     deck.notes.extend(notes)
-    print('Generated deck!')
+    logger = logging.getLogger('cardscraper')
+    logger.info('Generated deck!')
     return deck
