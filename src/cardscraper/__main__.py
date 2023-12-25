@@ -7,8 +7,8 @@ from cardscraper.__version__ import __version__
 from cardscraper.generate import (
     Config,
     Step,
-    find_plugins_and_generate,
     find_plugins_by_group,
+    generate_from_config,
 )
 from cardscraper.template import TEMPLATE
 
@@ -72,7 +72,7 @@ def cli(argv: Sequence[str] | None = None):
         case 'gen':
             for file in args.file:
                 conf: Config = yaml.load(file, yaml.Loader)
-                find_plugins_and_generate(conf)
+                generate_from_config(conf)
         case 'init':
             for file in args.file:
                 file.write(TEMPLATE)

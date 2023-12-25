@@ -3,7 +3,7 @@ from genanki import Deck, Note
 from cardscraper.generate import Config
 
 
-def default_deck(config: Config, notes: list[Note]) -> Deck:
+def get_deck(config: Config, notes: list[Note]) -> Deck:
     deck_config = config['deck']
     id = deck_config['id']
     name = deck_config['name']

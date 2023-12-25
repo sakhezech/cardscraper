@@ -1,12 +1,11 @@
-from cardscraper.default.deck import default_deck
-from cardscraper.default.model import default_model
+from cardscraper.default import get_deck, get_model
 from cardscraper.generate import Config
 from genanki import Note
 
 
 def test_deck(config: Config):
     note_list = [Note(), Note()]
-    deck = default_deck(config, note_list)
+    deck = get_deck(config, note_list)
 
     assert deck.notes == note_list
     assert deck.deck_id == config['deck']['id']
@@ -14,7 +13,7 @@ def test_deck(config: Config):
 
 
 def test_model(config: Config):
-    model = default_model(config)
+    model = get_model(config)
     sorted_fields = sorted(model.fields, key=lambda x: x['name'])
 
     assert sorted_fields == [{'name': 'Answer'}, {'name': 'Question'}]

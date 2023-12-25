@@ -1,11 +1,11 @@
-from cardscraper.default.deck import default_deck
-from cardscraper.default.model import default_model
-from cardscraper.default.package import default_package
-from cardscraper.default.scraping import default_notes
+from cardscraper.default.deck import get_deck
+from cardscraper.default.model import get_model
+from cardscraper.default.package import get_package
+from cardscraper.default.scraping import get_notes
 
 __all__ = [
-    'default_deck',
-    'default_model',
-    'default_package',
-    'default_notes',
+    'get_deck',
+    'get_model',
+    'get_package',
+    'get_notes',
 ]

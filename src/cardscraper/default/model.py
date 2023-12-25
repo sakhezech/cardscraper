@@ -7,7 +7,7 @@ from cardscraper.generate import Config
 in_sbraces = re.compile(r'{{(.*?)}}')
 
 
-def default_model(config: Config) -> Model:
+def get_model(config: Config) -> Model:
     model_config = config['model']
     id = model_config['id']
     name = model_config['name']

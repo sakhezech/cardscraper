@@ -86,7 +86,7 @@ def validate_query_tree(query: Query) -> bool:
     return query.many | bool(queries_with_many_under)
 
 
-def default_notes(config: Config, model: Model) -> list[Note]:
+def get_notes(config: Config, model: Model) -> list[Note]:
     scraping_config = config['scraping']
     urls = scraping_config['urls']
     agent = scraping_config.setdefault(

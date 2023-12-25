@@ -6,7 +6,7 @@ from genanki import Deck, Package
 from cardscraper.generate import Config
 
 
-def default_package(config: Config, deck: Deck) -> tuple[Package, Path]:
+def get_package(config: Config, deck: Deck) -> tuple[Package, Path]:
     package_config = config['package']
     name = package_config['name'].removesuffix('.apkg')
     output_path = package_config.setdefault('output', '.')

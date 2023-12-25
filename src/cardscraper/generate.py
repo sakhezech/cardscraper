@@ -32,7 +32,7 @@ class Config(TypedDict):
     package: dict
 
 
-def find_plugins_and_generate(config: Config) -> None:
+def generate_from_config(config: Config) -> None:
     if 'meta' not in config:
         config['meta'] = {}
     for module in Step:
