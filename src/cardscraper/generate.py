@@ -8,7 +8,11 @@ from genanki import Deck, Model, Note, Package
 from cardscraper.config import Config
 
 
-class Step(str, Enum):
+class StepName(str, Enum):
+    """
+    Names of the program steps.
+    """
+
     def __str__(self) -> str:
         return self.value
 
@@ -18,22 +22,23 @@ class Step(str, Enum):
     PACKAGE = 'package'
 
 
-def find_plugins_by_group(group: Step) -> EntryPoints:
+def get_entrypoints_by_step(group: StepName) -> EntryPoints:
     """
     Gets a collection of function entry points by step name.
 
     Args:
-        group (Step): name of the step, i.e. entry point group `cardscraper.x`.
+        group (StepName): Name of the step, i.e. entry point group
+            `cardscraper.x`.
 
     Returns:
-        EntryPoints: collection of function entry points.
+        EntryPoints: Collection of function entry points.
     """
     return entry_points(group=f'cardscraper.{group}')
 
 
-def get_function_by_group_and_name(group: Step, name: str) -> Callable:
+def select_function_by_step_and_name(group: StepName, name: str) -> Callable:
     """
-    Gets a function by group name and function name.
+    Gets a function by step name and function name.
 
     To get `mypackage:gen_model` from ::
 
@@ -46,42 +51,44 @@ def get_function_by_group_and_name(group: Step, name: str) -> Callable:
         [project.entry-points.'cardscraper.package']
         my_impl = 'mypackage:gen_package'
 
-    call `get_function_by_group_and_name(Step.MODEL, 'my_impl')`
+    call `select_function_by_step_and_name(Step.MODEL, 'my_impl')`
 
     Args:
-        group (Step): Name of the step, i.e. entry point group `cardscraper.x`.
+        group (StepName): Name of the step, i.e. entry point group
+            `cardscraper.x`.
         name (str): Function name.
 
     Returns:
         Callable: Selected function.
     """
-    return find_plugins_by_group(group)[name].load()
+    return get_entrypoints_by_step(group)[name].load()
 
 
-def generate_from_config(config: Config) -> None:
+def generate_anki_package_from_config_meta(config: Config) -> None:
     """
-    Finds the correct functions and generates and writes an Anki package.
-
-    Looks into the config's `meta` section and calls `generate_anki_package`.
+    Generates and writes an Anki package with automatically selected functions.
 
     Args:
-        config (Config): Config dictionary that has all the instructions for
-            all the found functions.
+        config (Config): Config dictionary.
     """
     if 'meta' not in config:
         config['meta'] = {}
-    for module in Step:
+    for module in StepName:
         config['meta'].setdefault(module, 'default')
 
     meta = config['meta']
 
-    get_model = get_function_by_group_and_name(Step.MODEL, meta[Step.MODEL])
-    get_notes = get_function_by_group_and_name(
-        Step.SCRAPING, meta[Step.SCRAPING]
+    get_model = select_function_by_step_and_name(
+        StepName.MODEL, meta[StepName.MODEL]
     )
-    get_deck = get_function_by_group_and_name(Step.DECK, meta[Step.DECK])
-    get_package = get_function_by_group_and_name(
-        Step.PACKAGE, meta[Step.PACKAGE]
+    get_notes = select_function_by_step_and_name(
+        StepName.SCRAPING, meta[StepName.SCRAPING]
+    )
+    get_deck = select_function_by_step_and_name(
+        StepName.DECK, meta[StepName.DECK]
+    )
+    get_package = select_function_by_step_and_name(
+        StepName.PACKAGE, meta[StepName.PACKAGE]
     )
 
     generate_anki_package(config, get_model, get_notes, get_deck, get_package)
@@ -98,15 +105,14 @@ def generate_anki_package(
     Generates and writes an Anki package with manually passed in functions.
 
     Args:
-        config (Config): Config dictionary that has all the instructions for
-            all the functions below.
-        get_model (Callable): A function that returns an Anki model from a
-            config
-        get_notes (Callable): A function that returns a list of Anki notes from
+        config (Config): Config dictionary.
+        get_model (Callable): Function that returns an Anki model from a
+            config.
+        get_notes (Callable): Function that returns a list of Anki notes from
             a config and a Anki model.
-        get_deck (Callable): A function that returns an Anki deck from a config
+        get_deck (Callable): Function that returns an Anki deck from a config
             and a list of Anki notes.
-        get_package (Callable): A function that returns an Anki package and the
+        get_package (Callable): Function that returns an Anki package and a
             path to write it to from a config and an Anki deck.
     """
     model = get_model(config)

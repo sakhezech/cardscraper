@@ -16,18 +16,18 @@ Typical usage example: ::
 """
 from cardscraper.config import Config
 from cardscraper.generate import (
-    Step,
-    find_plugins_by_group,
+    StepName,
     generate_anki_package,
-    generate_from_config,
-    get_function_by_group_and_name,
+    generate_anki_package_from_config_meta,
+    get_entrypoints_by_step,
+    select_function_by_step_and_name,
 )
 
 __all__ = [
     'Config',
-    'Step',
-    'find_plugins_by_group',
-    'generate_from_config',
+    'StepName',
+    'get_entrypoints_by_step',
+    'generate_anki_package_from_config_meta',
     'generate_anki_package',
-    'get_function_by_group_and_name',
+    'select_function_by_step_and_name',
 ]

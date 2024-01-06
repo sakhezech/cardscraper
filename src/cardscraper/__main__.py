@@ -7,9 +7,9 @@ import yaml
 from cardscraper.__version__ import __version__
 from cardscraper.config import Config
 from cardscraper.generate import (
-    Step,
-    find_plugins_by_group,
-    generate_from_config,
+    StepName,
+    generate_anki_package_from_config_meta,
+    get_entrypoints_by_step,
 )
 from cardscraper.template import TEMPLATE
 
@@ -76,14 +76,14 @@ def cli(argv: Sequence[str] | None = None):
     match args.command:
         case 'gen':
             for file in args.file:
-                conf: Config = yaml.load(file, yaml.Loader)
-                generate_from_config(conf)
+                config: Config = yaml.load(file, yaml.Loader)
+                generate_anki_package_from_config_meta(config)
         case 'init':
             for file in args.file:
                 file.write(TEMPLATE)
         case 'list':
-            for step in Step:
-                points = find_plugins_by_group(step)
+            for step in StepName:
+                points = get_entrypoints_by_step(step)
                 print(f'Available functions for {step}:')
                 for point in points:
                     print(f'  - {point.name}')
