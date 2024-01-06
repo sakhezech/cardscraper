@@ -4,7 +4,7 @@ from pathlib import Path
 
 from genanki import Deck, Package
 
-from cardscraper.generate import Config
+from cardscraper.config import Config
 
 
 def get_package(config: Config, deck: Deck) -> tuple[Package, Path]:

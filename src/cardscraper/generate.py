@@ -1,9 +1,11 @@
 from enum import Enum
 from importlib.metadata import EntryPoints, entry_points
 from pathlib import Path
-from typing import Callable, TypedDict
+from typing import Callable
 
 from genanki import Deck, Model, Note, Package
+
+from cardscraper.config import Config
 
 
 class Step(str, Enum):
@@ -54,18 +56,6 @@ def get_function_by_group_and_name(group: Step, name: str) -> Callable:
         Callable: Selected function.
     """
     return find_plugins_by_group(group)[name].load()
-
-
-class Config(TypedDict):
-    """
-    TODO: Write docs and make subdicts typed too.
-    """
-
-    meta: dict
-    model: dict
-    scraping: dict
-    deck: dict
-    package: dict
 
 
 def generate_from_config(config: Config) -> None:

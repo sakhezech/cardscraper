@@ -3,7 +3,7 @@ import re
 
 from genanki import Model
 
-from cardscraper.generate import Config
+from cardscraper.config import Config
 
 in_sbraces = re.compile(r'{{(.*?)}}')
 

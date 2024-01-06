@@ -5,8 +5,8 @@ from typing import Sequence
 import yaml
 
 from cardscraper.__version__ import __version__
+from cardscraper.config import Config
 from cardscraper.generate import (
-    Config,
     Step,
     find_plugins_by_group,
     generate_from_config,

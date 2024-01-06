@@ -14,8 +14,8 @@ Typical usage example: ::
     ...
     $ cardscraper gen hello.yaml
 """
+from cardscraper.config import Config
 from cardscraper.generate import (
-    Config,
     Step,
     find_plugins_by_group,
     generate_anki_package,

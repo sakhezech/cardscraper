@@ -2,7 +2,7 @@ import logging
 
 from genanki import Deck, Note
 
-from cardscraper.generate import Config
+from cardscraper.config import Config
 
 
 def get_deck(config: Config, notes: list[Note]) -> Deck:

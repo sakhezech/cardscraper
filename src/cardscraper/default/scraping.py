@@ -5,7 +5,7 @@ import requests
 from bs4 import BeautifulSoup, Tag
 from genanki import Model, Note
 
-from cardscraper.generate import Config
+from cardscraper.config import Config
 
 
 class Query:
