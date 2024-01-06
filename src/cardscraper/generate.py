@@ -18,20 +18,20 @@ class Step(str, Enum):
 
 def find_plugins_by_group(group: Step) -> EntryPoints:
     """
-    Gets the collection of function entry points by step name.
+    Gets a collection of function entry points by step name.
 
     Args:
-        group (Step): name of the step, i.e. entry point group `cardscraper.x`
+        group (Step): name of the step, i.e. entry point group `cardscraper.x`.
 
     Returns:
-        EntryPoints: collection of function entry points
+        EntryPoints: collection of function entry points.
     """
     return entry_points(group=f'cardscraper.{group}')
 
 
 def get_function_by_group_and_name(group: Step, name: str) -> Callable:
     """
-    Gets the function by group name and func name.
+    Gets a function by group name and function name.
 
     To get `mypackage:gen_model` from ::
 
@@ -47,16 +47,20 @@ def get_function_by_group_and_name(group: Step, name: str) -> Callable:
     call `get_function_by_group_and_name(Step.MODEL, 'my_impl')`
 
     Args:
-        group (Step): name of the step, i.e. entry point group `cardscraper.x`
-        name (str): function name
+        group (Step): Name of the step, i.e. entry point group `cardscraper.x`.
+        name (str): Function name.
 
     Returns:
-        Callable: selected function
+        Callable: Selected function.
     """
     return find_plugins_by_group(group)[name].load()
 
 
 class Config(TypedDict):
+    """
+    TODO: Write docs and make subdicts typed too.
+    """
+
     meta: dict
     model: dict
     scraping: dict
@@ -68,14 +72,11 @@ def generate_from_config(config: Config) -> None:
     """
     Finds the correct functions and generates and writes an Anki package.
 
-    Looks into the config's 'meta' section and calls `generate_anki_package`
+    Looks into the config's `meta` section and calls `generate_anki_package`.
 
     Args:
         config (Config): Config dictionary that has all the instructions for
-            all the found functions
-
-    Returns:
-        None
+            all the found functions.
     """
     if 'meta' not in config:
         config['meta'] = {}
@@ -108,17 +109,15 @@ def generate_anki_package(
 
     Args:
         config (Config): Config dictionary that has all the instructions for
-            all the functions below
-        get_model (Callable): function that returns an Anki model from a config
-        get_notes (Callable): function that returns a list of Anki notes from
-            a config and a Anki model
-        get_deck (Callable): function that returns an Anki deck from a config
-            and a list of Anki notes
-        get_package (Callable): function that returns an Anki package and the
-            path to write it to from a config and an Anki deck
-
-    Returns:
-        None
+            all the functions below.
+        get_model (Callable): A function that returns an Anki model from a
+            config
+        get_notes (Callable): A function that returns a list of Anki notes from
+            a config and a Anki model.
+        get_deck (Callable): A function that returns an Anki deck from a config
+            and a list of Anki notes.
+        get_package (Callable): A function that returns an Anki package and the
+            path to write it to from a config and an Anki deck.
     """
     model = get_model(config)
     notes = get_notes(config, model)

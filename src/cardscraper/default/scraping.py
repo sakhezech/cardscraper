@@ -34,14 +34,14 @@ def generate_notes_for_quote(
     info: dict | None = None,
 ) -> list[Note]:
     """
-    Generated notes from the query tree.
+    Generates notes from a query tree.
 
     Args:
-        tag (Tag):...
+        tag (Tag): BeautifulSoup tag object to query in.
         query (Query): Query tree starting node.
         model (Model): genanki Model for the notes.
-        notes (list[Note]): List of notes to return. Leave None.
-        info (dict): Dictionary of collected results. Leave None.
+        notes (list[Note]): List of notes to return.
+        info (dict): Dictionary of collected results.
 
     Returns:
         list[Note]: Generated notes.
@@ -158,7 +158,6 @@ def get_notes(config: Config, model: Model) -> list[Note]:
             'Gecko/20100101 Firefox/120.0'
         ),
     )
-
     headers = {'User-Agent': agent}
 
     queries = [Query(**child) for child in scraping_config['queries']]

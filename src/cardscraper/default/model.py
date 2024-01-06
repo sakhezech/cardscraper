@@ -15,6 +15,8 @@ def get_model(config: Config) -> Model:
     css = model_config.setdefault('css', '')
     templates = model_config['templates']
 
+    # special tags are tags that do special things in Anki
+    # we have to remove them from fields in model creation
     special_fields = {
         'Tags',
         'Type',
@@ -31,6 +33,7 @@ def get_model(config: Config) -> Model:
             fields.update(a)
 
     fields = fields.difference(special_fields)
+    # converting the set info a form genanki works with
     fields = [{'name': field} for field in fields]
 
     model = Model(id, name, fields, templates, css)
