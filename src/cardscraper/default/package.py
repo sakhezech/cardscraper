@@ -12,15 +12,10 @@ def get_package(config: Config, deck: Deck) -> tuple[Package, Path]:
     name = package_config['name'].removesuffix('.apkg')
     output_path = package_config.setdefault('output', '.')
     media_path = package_config.setdefault('media', None)
-    # pattern = package_config.setdefault('pattern', '**/*.*')
+    pattern = package_config.setdefault('pattern', '**/*.*')
 
-    # walking over the media folder and grabbing all files inside to put
-    # in the package as media
-    # TODO: Path.rglob(pattern='**/*.*') and add pattern to config
     if media_path:
-        media = [
-            os.path.join(p, n) for p, _, ns in os.walk(media_path) for n in ns
-        ]
+        media = [str(path) for path in Path(media_path).rglob(pattern)]
     else:
         media = []
     package = Package(deck, media)

@@ -52,8 +52,11 @@ package:
   # output folder (defaults to '.')
   output: ./out/
   # media folder (defaults to null)
-  # every file in the directory will be added to the package as media
+  # the directory will be walked recursively
+  # every pattern matched file will be added to the package as media
   media: ./media/
+  # pattern to match files against for media (defaults to **/*.*)
+  pattern: "**/*.png"
 
 # anki deck info
 deck:
