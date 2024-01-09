@@ -64,9 +64,11 @@ def select_function_by_step_and_name(group: StepName, name: str) -> Callable:
     return get_entrypoints_by_step(group)[name].load()
 
 
-def generate_anki_package_from_config_meta(config: Config) -> None:
+def generate_anki_package_from_config_meta(
+    config: Config,
+) -> tuple[Package, Path]:
     """
-    Generates and writes an Anki package with automatically selected functions.
+    Generates an Anki package with automatically selected functions.
 
     Args:
         config (Config): Config dictionary.
@@ -91,7 +93,9 @@ def generate_anki_package_from_config_meta(config: Config) -> None:
         StepName.PACKAGE, meta[StepName.PACKAGE]
     )
 
-    generate_anki_package(config, get_model, get_notes, get_deck, get_package)
+    return generate_anki_package(
+        config, get_model, get_notes, get_deck, get_package
+    )
 
 
 def generate_anki_package(
@@ -100,9 +104,9 @@ def generate_anki_package(
     get_notes: Callable[[Config, Model], list[Note]],
     get_deck: Callable[[Config, list[Note]], Deck],
     get_package: Callable[[Config, Deck], tuple[Package, Path]],
-) -> None:
+) -> tuple[Package, Path]:
     """
-    Generates and writes an Anki package with manually passed in functions.
+    Generates an Anki package with manually passed in functions.
 
     Args:
         config (Config): Config dictionary.
@@ -114,11 +118,25 @@ def generate_anki_package(
             and a list of Anki notes.
         get_package (Callable): Function that returns an Anki package and a
             path to write it to from a config and an Anki deck.
+
+    Returns:
+        Package: Anki Package.
+        Path: Path to save the package to.
     """
     model = get_model(config)
     notes = get_notes(config, model)
     deck = get_deck(config, notes)
     package, path = get_package(config, deck)
+    return package, path
 
+
+def write_package(package: Package, path: Path) -> None:
+    """
+    Writes an Anki package to a path.
+
+    Args:
+        package (Package): Anki Package.
+        path (Path): Path to save the package to.
+    """
     path.parent.mkdir(exist_ok=True)
     package.write_to_file(path)

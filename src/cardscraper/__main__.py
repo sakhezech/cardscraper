@@ -10,6 +10,7 @@ from cardscraper.generate import (
     StepName,
     generate_anki_package_from_config_meta,
     get_entrypoints_by_step,
+    write_package,
 )
 from cardscraper.template import TEMPLATE
 
@@ -77,7 +78,8 @@ def cli(argv: Sequence[str] | None = None):
         case 'gen':
             for file in args.file:
                 config: Config = yaml.load(file, yaml.Loader)
-                generate_anki_package_from_config_meta(config)
+                package, path = generate_anki_package_from_config_meta(config)
+                write_package(package, path)
         case 'init':
             for file in args.file:
                 file.write(TEMPLATE)

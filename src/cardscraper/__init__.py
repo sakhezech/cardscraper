@@ -21,6 +21,7 @@ from cardscraper.generate import (
     generate_anki_package_from_config_meta,
     get_entrypoints_by_step,
     select_function_by_step_and_name,
+    write_package,
 )
 
 __all__ = [
@@ -30,4 +31,5 @@ __all__ = [
     'generate_anki_package_from_config_meta',
     'generate_anki_package',
     'select_function_by_step_and_name',
+    'write_package',
 ]
