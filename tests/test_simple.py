@@ -1,6 +1,8 @@
-from cardscraper.default import get_deck, get_model
-from cardscraper.generate import Config
-from genanki import Note
+from pathlib import Path
+
+from cardscraper.config import Config
+from cardscraper.default import get_deck, get_model, get_package
+from genanki import Deck, Note
 
 
 def test_deck(config: Config):
@@ -31,4 +33,13 @@ def test_model(config: Config):
 
 
 def test_package(config: Config):
-    pass
+    deck = Deck()
+    package, path = get_package(config, deck)
+    assert path == Path('output/test_package.apkg')
+    if not isinstance(package.decks, list):
+        raise ValueError('Package has no deck?')
+    assert package.decks[0] == deck
+    assert package.media_files == [
+        'tests/files/media/include-me.txt',
+        'tests/files/media/dir/include-me-too.txt',
+    ]
