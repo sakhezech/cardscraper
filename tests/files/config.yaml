@@ -2,7 +2,7 @@ package:
   name: test_package.apkg
   output: output/
   media: tests/files/media/
-  pattern: '**/*.txt'
+  pattern: "**/*.txt"
 
 deck:
   name: Deck
