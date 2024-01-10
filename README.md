@@ -158,9 +158,10 @@ scraping:
 import yaml
 from cardscraper import (
     Config,
-    Step,
+    StepName,
     generate_anki_package,
-    get_function_by_group_and_name,
+    select_function_by_step_and_name,
+    write_package,
 )
 from genanki import Model, Note
 
@@ -169,16 +170,19 @@ if __name__ == '__main__':
         config: Config = yaml.load(f, yaml.Loader)
     # or you can make a config manually
 
-    get_model = get_function_by_group_and_name(Step.MODEL, 'default')
-    get_deck = get_function_by_group_and_name(Step.DECK, 'default')
-    get_package = get_function_by_group_and_name(Step.PACKAGE, 'default')
+    get_model = select_function_by_step_and_name(StepName.MODEL, 'default')
+    get_deck = select_function_by_step_and_name(StepName.DECK, 'default')
+    get_package = select_function_by_step_and_name(StepName.PACKAGE, 'default')
 
     def get_notes(config: Config, model: Model) -> list[Note]:
         notes = []
         ...
         return notes
 
-    generate_anki_package(config, get_model, get_notes, get_deck, get_package)
+    package, path = generate_anki_package(
+        config, get_model, get_notes, get_deck, get_package
+    )
+    write_package(package, path)
 ```
 
 ## Plugin system
