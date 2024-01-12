@@ -1,7 +1,7 @@
 package:
   name: test_package.apkg
   output: output/
-  media: tests/files/media/
+  media: media/
   pattern: "**/*.txt"
 
 deck:
@@ -36,8 +36,7 @@ model:
         </div>
 
 scraping:
-  urls:
-    - https://how.exactlyami.going/to?test=this
+  urls: []
   queries:
     - name: Country
       query: .country

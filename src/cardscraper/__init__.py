@@ -16,7 +16,6 @@ Typical usage example: ::
 """
 from cardscraper.config import Config
 from cardscraper.generate import (
-    StepName,
     generate_anki_package,
     generate_anki_package_from_config_meta,
     get_entrypoints_by_step,
@@ -26,7 +25,6 @@ from cardscraper.generate import (
 
 __all__ = [
     'Config',
-    'StepName',
     'get_entrypoints_by_step',
     'generate_anki_package_from_config_meta',
     'generate_anki_package',

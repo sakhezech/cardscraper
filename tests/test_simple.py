@@ -40,6 +40,6 @@ def test_package(config: Config):
         raise ValueError('Package has no deck?')
     assert package.decks[0] == deck
     assert package.media_files == [
-        'tests/files/media/include-me.txt',
-        'tests/files/media/dir/include-me-too.txt',
+        'media/include-me.txt',
+        'media/dir/include-me-too.txt',
     ]

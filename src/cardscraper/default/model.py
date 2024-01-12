@@ -12,7 +12,7 @@ def get_model(config: Config) -> Model:
     model_config = config['model']
     id = model_config['id']
     name = model_config['name']
-    css = model_config.setdefault('css', '')
+    css = model_config['css']
     templates = model_config['templates']
 
     # special tags are tags that do special things in Anki

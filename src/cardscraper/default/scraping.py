@@ -151,13 +151,7 @@ def validate_query_tree(query: Query) -> bool:
 def get_notes(config: Config, model: Model) -> list[Note]:
     scraping_config = config['scraping']
     urls = scraping_config['urls']
-    agent = scraping_config.setdefault(
-        'agent',
-        (
-            'Mozilla/5.0 (X11; Linux x86_64; rv:120.0) '
-            'Gecko/20100101 Firefox/120.0'
-        ),
-    )
+    agent = scraping_config['agent']
     headers = {'User-Agent': agent}
 
     queries = [Query(**child) for child in scraping_config['queries']]

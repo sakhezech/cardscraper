@@ -158,7 +158,6 @@ scraping:
 import yaml
 from cardscraper import (
     Config,
-    StepName,
     generate_anki_package,
     select_function_by_step_and_name,
     write_package,
@@ -170,9 +169,9 @@ if __name__ == '__main__':
         config: Config = yaml.load(f, yaml.Loader)
     # or you can make a config manually
 
-    get_model = select_function_by_step_and_name(StepName.MODEL, 'default')
-    get_deck = select_function_by_step_and_name(StepName.DECK, 'default')
-    get_package = select_function_by_step_and_name(StepName.PACKAGE, 'default')
+    get_model = select_function_by_step_and_name('model', 'default')
+    get_deck = select_function_by_step_and_name('deck', 'default')
+    get_package = select_function_by_step_and_name('package', 'default')
 
     def get_notes(config: Config, model: Model) -> list[Note]:
         notes = []

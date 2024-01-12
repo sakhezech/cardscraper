@@ -1,6 +1,6 @@
 import argparse
 import logging
-from typing import Sequence
+from typing import Sequence, get_args
 
 import yaml
 
@@ -84,7 +84,7 @@ def cli(argv: Sequence[str] | None = None):
             for file in args.file:
                 file.write(TEMPLATE)
         case 'list':
-            for step in StepName:
+            for step in get_args(StepName):
                 points = get_entrypoints_by_step(step)
                 print(f'Available functions for {step}:')
                 for point in points:

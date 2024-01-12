@@ -1,25 +1,12 @@
-from enum import Enum
 from importlib.metadata import EntryPoints, entry_points
 from pathlib import Path
-from typing import Callable
+from typing import Callable, Literal, get_args
 
 from genanki import Deck, Model, Note, Package
 
-from cardscraper.config import Config
+from cardscraper.config import Config, MetaConfig, set_config_defaults
 
-
-class StepName(str, Enum):
-    """
-    Names of the program steps.
-    """
-
-    def __str__(self) -> str:
-        return self.value
-
-    MODEL = 'model'
-    SCRAPING = 'scraping'
-    DECK = 'deck'
-    PACKAGE = 'package'
+StepName = Literal['model', 'scraping', 'deck', 'package']
 
 
 def get_entrypoints_by_step(group: StepName) -> EntryPoints:
@@ -51,7 +38,7 @@ def select_function_by_step_and_name(group: StepName, name: str) -> Callable:
         [project.entry-points.'cardscraper.package']
         my_impl = 'mypackage:gen_package'
 
-    call `select_function_by_step_and_name(Step.MODEL, 'my_impl')`
+    call `select_function_by_step_and_name('model', 'my_impl')`
 
     Args:
         group (StepName): Name of the step, i.e. entry point group
@@ -73,25 +60,19 @@ def generate_anki_package_from_config_meta(
     Args:
         config (Config): Config dictionary.
     """
-    if 'meta' not in config:
-        config['meta'] = {}
-    for module in StepName:
-        config['meta'].setdefault(module, 'default')
+    default_meta_config: MetaConfig = {
+        step: 'default' for step in get_args(StepName)
+    }  # type: ignore
+    if 'meta' in config:
+        config['meta'] = default_meta_config | config['meta']
+    else:
+        config['meta'] = default_meta_config
 
     meta = config['meta']
-
-    get_model = select_function_by_step_and_name(
-        StepName.MODEL, meta[StepName.MODEL]
-    )
-    get_notes = select_function_by_step_and_name(
-        StepName.SCRAPING, meta[StepName.SCRAPING]
-    )
-    get_deck = select_function_by_step_and_name(
-        StepName.DECK, meta[StepName.DECK]
-    )
-    get_package = select_function_by_step_and_name(
-        StepName.PACKAGE, meta[StepName.PACKAGE]
-    )
+    get_model = select_function_by_step_and_name('model', meta['model'])
+    get_notes = select_function_by_step_and_name('scraping', meta['scraping'])
+    get_deck = select_function_by_step_and_name('deck', meta['deck'])
+    get_package = select_function_by_step_and_name('package', meta['package'])
 
     return generate_anki_package(
         config, get_model, get_notes, get_deck, get_package
@@ -123,6 +104,8 @@ def generate_anki_package(
         Package: Anki Package.
         Path: Path to save the package to.
     """
+    set_config_defaults(config)
+
     model = get_model(config)
     notes = get_notes(config, model)
     deck = get_deck(config, notes)
