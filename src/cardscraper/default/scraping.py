@@ -5,7 +5,7 @@ import requests
 from bs4 import BeautifulSoup, Tag
 from genanki import Model, Note
 
-from cardscraper.config import Config
+from cardscraper.config import Config, QueryDict
 
 
 class Query:
@@ -15,10 +15,10 @@ class Query:
         query: str,
         many: bool = False,
         regex: str | None = None,
-        children: dict | None = None,
+        children: list[QueryDict] | None = None,
     ) -> None:
         if children is None:
-            children = {}
+            children = []
         self.name = name
         self.query = query
         self.many = many
@@ -39,9 +39,9 @@ def generate_notes_for_quote(
     Args:
         tag (Tag): BeautifulSoup tag object to query in.
         query (Query): Query tree starting node.
-        model (Model): genanki Model for the notes.
-        notes (list[Note]): List of notes to return.
-        info (dict): Dictionary of collected results.
+        model (Model): Anki Model for the notes.
+        notes (list[Note] | None): List of notes to return.
+        info (dict | None): Dictionary of collected results.
 
     Returns:
         list[Note]: Generated notes.
@@ -111,7 +111,7 @@ def make_note_from_info(info: dict, model: Model) -> Note:
 
     Args:
         info (dict): Collected info from queries.
-        model (Model): genanki Model for the notes.
+        model (Model): Anki Model for the notes.
 
     Returns:
         Note: Constructed note.
