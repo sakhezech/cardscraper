@@ -1,36 +1,50 @@
 # cardscraper
 
-A tool for generating Anki packages by webscraping.
+Webscraping tool for generating Anki packages.
 
 ## Installation
 
-install from [PyPI](https://pypi.org/project/cardscraper/)
+From [PyPI](https://pypi.org/project/cardscraper/):
 
-```
+```sh
 pip install cardscraper
 ```
 
-## Basic usage
+From git:
+
+```sh
+pip install git+https://github.com/sakhezech/cardscraper
+```
+
+## Usage
 
 `cardscraper ...` or `python -m cardscraper ...`
 
-cardscraper has 3 main subcommands:
+Generate a skeleton input file:
 
-- `cardscraper gen` - takes in [input files](#input-file-format) and generates Anki packages
-- `cardscraper init` - generates skeleton [input files](#input-file-format)
-- `cardscraper list` - lists all available functions for each step (cardscraper has a [plugin system](#plugin-system))
+```sh
+cardscraper init filename.yaml
+```
 
-and you can always use `cardscraper <subcommand> -h`
+Edit it with your favorite text editor:
 
-I recommend doing something like:
+```sh
+nvim filename.yaml
+```
 
-1. `cardscraper init hello.yaml`
-2. edit the file to suit your needs
-3. `cardscraper gen hello.yaml`
+Generate the package:
 
-## Input file format
+```sh
+cardscraper gen filename.yaml
+```
 
-cardscraper takes in YAML files as input
+For more info use `cardscraper -h`.
+
+## Input files
+
+You can generate a skeleton input file by using `cardscraper init filename.yaml`.
+
+Here is a big self-explaining input file examlpe:
 
 ```yaml
 # here you can specify which function to use for each step
@@ -152,7 +166,9 @@ scraping:
           children: null
 ```
 
-## Using in code
+## Usage in code
+
+It is possible to use cardscraper as a library, but it is created to be used as a CLI application.
 
 ```py
 import yaml
@@ -186,15 +202,17 @@ if __name__ == '__main__':
 
 ## Plugin system
 
-you can add custom functions by exposing `cardscraper.step` entry point in your package
+A plugin system is present in cardscraper. To expose your functions to cardscraper expose them in an entry point named `cardscraper.STEPNAME`.
+
+This is how the default functions are exposed:
 
 ```toml
 [project.entry-points.'cardscraper.model']
-my_impl = 'mypackage:gen_model'
+default = 'cardscraper.default:get_model'
 [project.entry-points.'cardscraper.scraping']
-my_impl = 'mypackage:gen_notes'
+default = 'cardscraper.default:get_notes'
 [project.entry-points.'cardscraper.deck']
-my_impl = 'mypackage:gen_deck'
+default = 'cardscraper.default:get_deck'
 [project.entry-points.'cardscraper.package']
-my_impl = 'mypackage:gen_package'
+default = 'cardscraper.default:get_package'
 ```
