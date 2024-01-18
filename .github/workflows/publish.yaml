@@ -1,4 +1,4 @@
-name: Upload Python Package
+name: Publish
 
 on: [workflow_dispatch]
 
@@ -6,7 +6,7 @@ permissions:
   contents: read
 
 jobs:
-  deploy:
+  publish:
     runs-on: ubuntu-latest
 
     steps:
