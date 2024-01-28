@@ -152,7 +152,10 @@ def get_notes(config: Config, model: Model) -> list[Note]:
     scraping_config = config['scraping']
     urls = scraping_config['urls']
     agent = scraping_config['agent']
-    headers = {'User-Agent': agent}
+    if agent is None:
+        headers = {}
+    else:
+        headers = {'User-Agent': agent}
 
     queries = [Query(**child) for child in scraping_config['queries']]
     for query in queries:

@@ -36,7 +36,7 @@ class QueryDict(TypedDict):
 
 class ScrapingConfig(TypedDict):
     urls: list[str]
-    agent: str
+    agent: str | None
     queries: list[QueryDict]
 
 
@@ -137,7 +137,7 @@ class Config(TypedDict):
           # list of urls to scrape
           urls:
             - https://www.scrapethissite.com/pages/simple/
-          # you can set your own custom user agent (defaults to the one here)
+          # you can set your own custom user agent (defaults to null)
           agent: Mozilla/5.0 (X11; Linux x86_64; rv:120.0) Gecko/20100101 Firefox/120.0
           # list of queries
           # each query selects an html element and lets you use its text in the templates
@@ -198,12 +198,6 @@ def set_config_defaults(config: Config) -> Config:
     package_config.setdefault('pattern', '**/*.*')
 
     scraping_config = config['scraping']
-    scraping_config.setdefault(
-        'agent',
-        (
-            'Mozilla/5.0 (X11; Linux x86_64; rv:120.0) '
-            'Gecko/20100101 Firefox/120.0'
-        ),
-    )
+    scraping_config.setdefault('agent', None)
 
     return config

@@ -44,7 +44,7 @@ For more info use `cardscraper -h`.
 
 You can generate a skeleton input file by using `cardscraper init filename.yaml`.
 
-Here is a big self-explaining input file examlpe:
+Here is a big self-explaining input file example:
 
 ```yaml
 # here you can specify which function to use for each step
@@ -133,7 +133,7 @@ scraping:
   # list of urls to scrape
   urls:
     - https://www.scrapethissite.com/pages/simple/
-  # you can set your own custom user agent (defaults to the one here)
+  # you can set your own custom user agent (defaults to null)
   agent: Mozilla/5.0 (X11; Linux x86_64; rv:120.0) Gecko/20100101 Firefox/120.0
   # list of queries
   # each query selects an html element and lets you use its text in the templates
