@@ -168,7 +168,7 @@ scraping:
 
 ## Usage in code
 
-It is possible to use cardscraper as a library, but it is created to be used as a CLI application.
+It is possible to use cardscraper programmatically, but it is created to be used as a CLI application.
 
 ```py
 import yaml
