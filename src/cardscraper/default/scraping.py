@@ -37,14 +37,14 @@ def generate_notes_for_quote(
     Generates notes from a query tree.
 
     Args:
-        tag (Tag): BeautifulSoup tag object to query in.
-        query (Query): Query tree starting node.
-        model (Model): Anki Model for the notes.
-        notes (list[Note] | None): List of notes to return.
-        info (dict | None): Dictionary of collected results.
+        tag: BeautifulSoup tag object to query in.
+        query: Query tree starting node.
+        model: Anki Model for the notes.
+        notes: List of notes to return.
+        info: Dictionary of collected results.
 
     Returns:
-        list[Note]: Generated notes.
+        Generated notes.
     """
     if notes is None:
         notes = []
@@ -110,11 +110,11 @@ def make_note_from_info(info: dict, model: Model) -> Note:
     Creates a Note from the collected info.
 
     Args:
-        info (dict): Collected info from queries.
-        model (Model): Anki Model for the notes.
+        info: Collected info from queries.
+        model: Anki Model for the notes.
 
     Returns:
-        Note: Constructed note.
+        An Anki note.
     """
     model_field_names = [
         field_name for fd in model.fields for _, field_name in fd.items()
@@ -132,10 +132,10 @@ def validate_query_tree(query: Query) -> bool:
     parent 'many' query) we have no idea how to loop over them.
 
     Args:
-        query (Query): Query tree starting node.
+        query: Query tree starting node.
 
     Returns:
-        bool: Whether query tree is correct or not.
+        Whether the query node has a 'many' query under it.
     """
     queries_with_many_under = [
         validate_query_tree(child) for child in query.children

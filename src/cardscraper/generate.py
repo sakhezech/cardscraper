@@ -14,11 +14,10 @@ def get_entrypoints_by_step(group: StepName) -> EntryPoints:
     Gets a collection of function entry points by step name.
 
     Args:
-        group (StepName): Name of the step, i.e. entry point group
-            `cardscraper.x`.
+        group: Name of the step, i.e. entry point group `cardscraper.x`.
 
     Returns:
-        EntryPoints: Collection of function entry points.
+        A collection of function entry points.
     """
     return entry_points(group=f'cardscraper.{group}')
 
@@ -41,12 +40,11 @@ def select_function_by_step_and_name(group: StepName, name: str) -> Callable:
     call `select_function_by_step_and_name('model', 'my_impl')`
 
     Args:
-        group (StepName): Name of the step, i.e. entry point group
-            `cardscraper.x`.
-        name (str): Function name.
+        group: Name of the step, i.e. entry point group `cardscraper.x`.
+        name: Function name.
 
     Returns:
-        Callable: Selected function.
+        The selected function.
     """
     return get_entrypoints_by_step(group)[name].load()
 
@@ -58,7 +56,11 @@ def generate_anki_package_from_config_meta(
     Generates an Anki package with automatically selected functions.
 
     Args:
-        config (Config): Config dictionary.
+        config: Config dictionary.
+
+    Returns:
+        A tuple (package, path), where package is an Anki Package, and
+        path is the path to save the package to.
     """
     default_meta_config: MetaConfig = {
         step: 'default' for step in get_args(StepName)
@@ -90,19 +92,18 @@ def generate_anki_package(
     Generates an Anki package with manually passed in functions.
 
     Args:
-        config (Config): Config dictionary.
-        get_model (Callable): Function that returns an Anki model from a
-            config.
-        get_notes (Callable): Function that returns a list of Anki notes from
-            a config and a Anki model.
-        get_deck (Callable): Function that returns an Anki deck from a config
-            and a list of Anki notes.
-        get_package (Callable): Function that returns an Anki package and a
-            path to write it to from a config and an Anki deck.
+        config: Config dictionary.
+        get_model: Function that returns an Anki model from a config.
+        get_notes: Function that returns a list of Anki notes from a config and
+            an Anki model.
+        get_deck: Function that returns an Anki deck from a config and a list
+            of Anki notes.
+        get_package: Function that returns an Anki package and a path to write
+            it to from a config and an Anki deck.
 
     Returns:
-        Package: Anki Package.
-        Path: Path to save the package to.
+        A tuple (package, path), where package is an Anki Package, and
+        path is the path to save the package to.
     """
     set_config_defaults(config)
 
@@ -118,8 +119,8 @@ def write_package(package: Package, path: Path) -> None:
     Writes an Anki package to a path.
 
     Args:
-        package (Package): Anki Package.
-        path (Path): Path to save the package to.
+        package: Anki Package.
+        path: Path to save the package to.
     """
     path.parent.mkdir(exist_ok=True)
     package.write_to_file(path)
